@@ -1,0 +1,14 @@
+C:\Users\davyc\source\repos\MunicipalServicesApp\obj\Debug\MunicipalServicesApp.csproj.AssemblyReference.cache
+C:\Users\davyc\source\repos\MunicipalServicesApp\obj\Debug\MunicipalServicesApp.Properties.Resources.resources
+C:\Users\davyc\source\repos\MunicipalServicesApp\obj\Debug\MunicipalServicesApp.csproj.GenerateResource.cache
+C:\Users\davyc\source\repos\MunicipalServicesApp\obj\Debug\MunicipalServicesApp.csproj.CoreCompileInputs.cache
+C:\Users\davyc\source\repos\MunicipalServicesApp\obj\Debug\MunicipalServicesApp.MainForm.resources
+C:\Users\davyc\source\repos\MunicipalServicesApp\obj\Debug\MunicipalServicesApp.ReportIssueForm.resources
+C:\Users\davyc\source\repos\MunicipalServicesApp\bin\Debug\MunicipalServicesApp.exe.config
+C:\Users\davyc\source\repos\MunicipalServicesApp\bin\Debug\MunicipalServicesApp.exe
+C:\Users\davyc\source\repos\MunicipalServicesApp\bin\Debug\MunicipalServicesApp.pdb
+C:\Users\davyc\source\repos\MunicipalServicesApp\obj\Debug\MunicipalServicesApp.exe
+C:\Users\davyc\source\repos\MunicipalServicesApp\obj\Debug\MunicipalServicesApp.pdb
+C:\Users\davyc\source\repos\MunicipalServicesApp\obj\Debug\MunicipalServicesApp.exe.config
+C:\Users\davyc\source\repos\MunicipalServicesApp\obj\Debug\MunicipalServicesApp.MyReportsForm.resources
+C:\Users\davyc\source\repos\MunicipalServicesApp\obj\Debug\MunicipalServicesApp.EventsAndAnnouncementsForm.resources
