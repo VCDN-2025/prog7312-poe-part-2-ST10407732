@@ -11,7 +11,12 @@ namespace MunicipalServicesApp
         private PictureBox picLogo;
         private Label lblTitle;
         private Label lblLocation;
-        private TextBox txtLocation;
+        private Label lblProvince;
+        private ComboBox cmbProvince;
+        private Label lblCity;
+        private ComboBox cmbCity;
+        private Label lblArea;
+        private ComboBox cmbArea;
         private Label lblCategory;
         private ComboBox cmbCategory;
         private Label lblDescription;
@@ -39,7 +44,12 @@ namespace MunicipalServicesApp
             this.lblTitle = new System.Windows.Forms.Label();
             this.mainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.lblLocation = new System.Windows.Forms.Label();
-            this.txtLocation = new System.Windows.Forms.TextBox();
+            this.lblProvince = new System.Windows.Forms.Label();
+            this.cmbProvince = new System.Windows.Forms.ComboBox();
+            this.lblCity = new System.Windows.Forms.Label();
+            this.cmbCity = new System.Windows.Forms.ComboBox();
+            this.lblArea = new System.Windows.Forms.Label();
+            this.cmbArea = new System.Windows.Forms.ComboBox();
             this.lblCategory = new System.Windows.Forms.Label();
             this.cmbCategory = new System.Windows.Forms.ComboBox();
             this.lblDescription = new System.Windows.Forms.Label();
@@ -77,6 +87,7 @@ namespace MunicipalServicesApp
             this.lblTitle.TabIndex = 2;
             this.lblTitle.Text = "📢 Report an Issue";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblTitle.Click += new System.EventHandler(this.lblTitle_Click);
             // 
             // mainLayout
             // 
@@ -84,57 +95,122 @@ namespace MunicipalServicesApp
             this.mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.mainLayout.Controls.Add(this.lblLocation, 0, 0);
-            this.mainLayout.Controls.Add(this.txtLocation, 1, 0);
-            this.mainLayout.Controls.Add(this.lblCategory, 0, 1);
-            this.mainLayout.Controls.Add(this.cmbCategory, 1, 1);
-            this.mainLayout.Controls.Add(this.lblDescription, 0, 2);
-            this.mainLayout.Controls.Add(this.rtbDescription, 1, 2);
-            this.mainLayout.Controls.Add(this.lblAttachments, 0, 3);
-            this.mainLayout.Controls.Add(this.lstAttachments, 1, 3);
-            this.mainLayout.Controls.Add(this.btnAddAttachment, 1, 4);
-            this.mainLayout.Controls.Add(this.btnSubmit, 0, 5);
-            this.mainLayout.Controls.Add(this.btnBackToMenu, 1, 5);
+            this.mainLayout.Controls.Add(this.lblProvince, 0, 1);
+            this.mainLayout.Controls.Add(this.cmbProvince, 1, 1);
+            this.mainLayout.Controls.Add(this.lblCity, 0, 2);
+            this.mainLayout.Controls.Add(this.cmbCity, 1, 2);
+            this.mainLayout.Controls.Add(this.lblArea, 0, 3);
+            this.mainLayout.Controls.Add(this.cmbArea, 1, 3);
+            this.mainLayout.Controls.Add(this.lblCategory, 0, 4);
+            this.mainLayout.Controls.Add(this.cmbCategory, 1, 4);
+            this.mainLayout.Controls.Add(this.lblDescription, 0, 5);
+            this.mainLayout.Controls.Add(this.rtbDescription, 1, 5);
+            this.mainLayout.Controls.Add(this.lblAttachments, 0, 6);
+            this.mainLayout.Controls.Add(this.lstAttachments, 1, 6);
+            this.mainLayout.Controls.Add(this.btnAddAttachment, 1, 7);
+            this.mainLayout.Controls.Add(this.btnSubmit, 0, 8);
+            this.mainLayout.Controls.Add(this.btnBackToMenu, 1, 8);
             this.mainLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainLayout.Location = new System.Drawing.Point(0, 160);
             this.mainLayout.Name = "mainLayout";
             this.mainLayout.Padding = new System.Windows.Forms.Padding(20);
-            this.mainLayout.RowCount = 6;
-            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.mainLayout.RowCount = 9;
+            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
             this.mainLayout.Size = new System.Drawing.Size(784, 371);
             this.mainLayout.TabIndex = 0;
             // 
             // lblLocation
             // 
             this.lblLocation.AutoSize = true;
+            this.mainLayout.SetColumnSpan(this.lblLocation, 2);
             this.lblLocation.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.lblLocation.Location = new System.Drawing.Point(23, 20);
             this.lblLocation.Name = "lblLocation";
-            this.lblLocation.Size = new System.Drawing.Size(99, 20);
+            this.lblLocation.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.lblLocation.Size = new System.Drawing.Size(99, 25);
             this.lblLocation.TabIndex = 0;
             this.lblLocation.Text = "📍 Location:";
             // 
-            // txtLocation
+            // lblProvince
             // 
-            this.txtLocation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtLocation.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtLocation.Location = new System.Drawing.Point(246, 23);
-            this.txtLocation.Name = "txtLocation";
-            this.txtLocation.Size = new System.Drawing.Size(515, 27);
-            this.txtLocation.TabIndex = 1;
+            this.lblProvince.AutoSize = true;
+            this.lblProvince.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblProvince.Location = new System.Drawing.Point(23, 45);
+            this.lblProvince.Name = "lblProvince";
+            this.lblProvince.Padding = new System.Windows.Forms.Padding(20, 5, 0, 0);
+            this.lblProvince.Size = new System.Drawing.Size(85, 24);
+            this.lblProvince.TabIndex = 1;
+            this.lblProvince.Text = "Province:";
+            // 
+            // cmbProvince
+            // 
+            this.cmbProvince.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmbProvince.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbProvince.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.cmbProvince.Location = new System.Drawing.Point(246, 48);
+            this.cmbProvince.Name = "cmbProvince";
+            this.cmbProvince.Size = new System.Drawing.Size(515, 28);
+            this.cmbProvince.TabIndex = 2;
+            // 
+            // lblCity
+            // 
+            this.lblCity.AutoSize = true;
+            this.lblCity.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblCity.Location = new System.Drawing.Point(23, 79);
+            this.lblCity.Name = "lblCity";
+            this.lblCity.Padding = new System.Windows.Forms.Padding(20, 5, 0, 0);
+            this.lblCity.Size = new System.Drawing.Size(52, 24);
+            this.lblCity.TabIndex = 3;
+            this.lblCity.Text = "City:";
+            // 
+            // cmbCity
+            // 
+            this.cmbCity.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmbCity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCity.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.cmbCity.Location = new System.Drawing.Point(246, 82);
+            this.cmbCity.Name = "cmbCity";
+            this.cmbCity.Size = new System.Drawing.Size(515, 28);
+            this.cmbCity.TabIndex = 4;
+            // 
+            // lblArea
+            // 
+            this.lblArea.AutoSize = true;
+            this.lblArea.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblArea.Location = new System.Drawing.Point(23, 113);
+            this.lblArea.Name = "lblArea";
+            this.lblArea.Padding = new System.Windows.Forms.Padding(20, 5, 0, 0);
+            this.lblArea.Size = new System.Drawing.Size(56, 24);
+            this.lblArea.TabIndex = 5;
+            this.lblArea.Text = "Area:";
+            // 
+            // cmbArea
+            // 
+            this.cmbArea.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmbArea.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbArea.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.cmbArea.Location = new System.Drawing.Point(246, 116);
+            this.cmbArea.Name = "cmbArea";
+            this.cmbArea.Size = new System.Drawing.Size(515, 28);
+            this.cmbArea.TabIndex = 6;
             // 
             // lblCategory
             // 
             this.lblCategory.AutoSize = true;
             this.lblCategory.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblCategory.Location = new System.Drawing.Point(23, 53);
+            this.lblCategory.Location = new System.Drawing.Point(23, 147);
             this.lblCategory.Name = "lblCategory";
-            this.lblCategory.Size = new System.Drawing.Size(103, 20);
-            this.lblCategory.TabIndex = 2;
+            this.lblCategory.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.lblCategory.Size = new System.Drawing.Size(103, 30);
+            this.lblCategory.TabIndex = 7;
             this.lblCategory.Text = "📂 Category:";
             // 
             // cmbCategory
@@ -142,73 +218,80 @@ namespace MunicipalServicesApp
             this.cmbCategory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmbCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbCategory.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.cmbCategory.Location = new System.Drawing.Point(246, 56);
+            this.cmbCategory.Location = new System.Drawing.Point(246, 160);
+            this.cmbCategory.Margin = new System.Windows.Forms.Padding(3, 13, 3, 3);
             this.cmbCategory.Name = "cmbCategory";
             this.cmbCategory.Size = new System.Drawing.Size(515, 28);
-            this.cmbCategory.TabIndex = 3;
+            this.cmbCategory.TabIndex = 8;
             // 
             // lblDescription
             // 
             this.lblDescription.AutoSize = true;
             this.lblDescription.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblDescription.Location = new System.Drawing.Point(23, 80);
+            this.lblDescription.Location = new System.Drawing.Point(23, 191);
             this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(119, 20);
-            this.lblDescription.TabIndex = 4;
+            this.lblDescription.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.lblDescription.Size = new System.Drawing.Size(119, 30);
+            this.lblDescription.TabIndex = 9;
             this.lblDescription.Text = "📝 Description:";
             // 
             // rtbDescription
             // 
             this.rtbDescription.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbDescription.Location = new System.Drawing.Point(246, 83);
+            this.rtbDescription.Location = new System.Drawing.Point(246, 204);
+            this.rtbDescription.Margin = new System.Windows.Forms.Padding(3, 13, 3, 3);
             this.rtbDescription.Name = "rtbDescription";
             this.rtbDescription.Size = new System.Drawing.Size(515, 120);
-            this.rtbDescription.TabIndex = 5;
+            this.rtbDescription.TabIndex = 10;
             this.rtbDescription.Text = "";
             // 
             // lblAttachments
             // 
             this.lblAttachments.AutoSize = true;
             this.lblAttachments.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblAttachments.Location = new System.Drawing.Point(23, 206);
+            this.lblAttachments.Location = new System.Drawing.Point(23, 327);
             this.lblAttachments.Name = "lblAttachments";
-            this.lblAttachments.Size = new System.Drawing.Size(130, 20);
-            this.lblAttachments.TabIndex = 6;
+            this.lblAttachments.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.lblAttachments.Size = new System.Drawing.Size(130, 30);
+            this.lblAttachments.TabIndex = 11;
             this.lblAttachments.Text = "📎 Attachments:";
             // 
             // lstAttachments
             // 
             this.lstAttachments.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstAttachments.Location = new System.Drawing.Point(246, 209);
+            this.lstAttachments.Location = new System.Drawing.Point(246, 340);
+            this.lstAttachments.Margin = new System.Windows.Forms.Padding(3, 13, 3, 3);
             this.lstAttachments.Name = "lstAttachments";
             this.lstAttachments.Size = new System.Drawing.Size(515, 80);
-            this.lstAttachments.TabIndex = 7;
+            this.lstAttachments.TabIndex = 12;
             // 
             // btnAddAttachment
             // 
             this.btnAddAttachment.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnAddAttachment.Location = new System.Drawing.Point(686, 295);
+            this.btnAddAttachment.Location = new System.Drawing.Point(601, 426);
             this.btnAddAttachment.Name = "btnAddAttachment";
-            this.btnAddAttachment.Size = new System.Drawing.Size(75, 23);
-            this.btnAddAttachment.TabIndex = 8;
+            this.btnAddAttachment.Size = new System.Drawing.Size(160, 35);
+            this.btnAddAttachment.TabIndex = 13;
             this.btnAddAttachment.Text = "➕ Add Attachment";
             // 
             // btnSubmit
             // 
             this.btnSubmit.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnSubmit.Location = new System.Drawing.Point(56, 324);
+            this.btnSubmit.Location = new System.Drawing.Point(56, 474);
+            this.btnSubmit.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.btnSubmit.Name = "btnSubmit";
-            this.btnSubmit.Size = new System.Drawing.Size(150, 35);
-            this.btnSubmit.TabIndex = 9;
+            this.btnSubmit.Size = new System.Drawing.Size(150, 40);
+            this.btnSubmit.TabIndex = 14;
             this.btnSubmit.Text = "✅ Submit Issue";
             // 
             // btnBackToMenu
             // 
             this.btnBackToMenu.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnBackToMenu.Location = new System.Drawing.Point(428, 324);
+            this.btnBackToMenu.Location = new System.Drawing.Point(428, 474);
+            this.btnBackToMenu.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.btnBackToMenu.Name = "btnBackToMenu";
-            this.btnBackToMenu.Size = new System.Drawing.Size(150, 35);
-            this.btnBackToMenu.TabIndex = 10;
+            this.btnBackToMenu.Size = new System.Drawing.Size(150, 40);
+            this.btnBackToMenu.TabIndex = 15;
             this.btnBackToMenu.Text = "⬅ Back to Menu";
             // 
             // lblEngagement
@@ -248,14 +331,14 @@ namespace MunicipalServicesApp
             this.Controls.Add(this.picLogo);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.lblEngagement);
-            this.MinimumSize = new System.Drawing.Size(800, 550);
+            this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "ReportIssueForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Report Issue - Municipal Services";
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
             this.mainLayout.ResumeLayout(false);
             this.mainLayout.PerformLayout();
             this.ResumeLayout(false);
-
         }
     }
 }

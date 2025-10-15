@@ -9,6 +9,10 @@ namespace MunicipalServicesApp.DataStructures
     {
         private Dictionary<string, int> categorySearchCount = new Dictionary<string, int>();
         private Dictionary<DateTime, int> dateSearchCount = new Dictionary<DateTime, int>();
+        private int totalSearchCount = 0;
+
+        private Dictionary<string, int> textSearchCount = new Dictionary<string, int>();
+
 
         // Track category searches
         public void TrackCategorySearch(string category)
@@ -28,56 +32,48 @@ namespace MunicipalServicesApp.DataStructures
             dateSearchCount[date]++;
         }
 
+
         // Recommend events based on search history
-        public List<Event> GetRecommendedEvents(List<Event> allEvents, int maxRecommendations = 5)
+        public List<Event> GetRecommendedEvents(List<Event> allEvents, int maxRecommendations = 3)
         {
             List<Event> recommended = new List<Event>();
 
-            // Top searched categories
-            var topCategories = categorySearchCount
-                .OrderByDescending(kv => kv.Value)
-                .Select(kv => kv.Key)
+            // If no searches, return empty list
+            if (categorySearchCount.Count == 0 && dateSearchCount.Count == 0)
+                return recommended;
+
+            // Combine category + date searches
+            var searchedCategories = categorySearchCount.Keys.ToList();
+            var searchedDates = dateSearchCount.Keys.ToList();
+
+            // Only events that match both searched categories AND dates
+            var matchingEvents = allEvents
+                .Where(e => searchedCategories.Contains(e.Category) &&
+                            searchedDates.Any(d => e.Date.Date == d.Date))
+                .OrderByDescending(e => e.Priority)
+                .ThenBy(e => e.Date)
+                .Take(maxRecommendations)
                 .ToList();
 
-            // Top searched dates
-            var topDates = dateSearchCount
-                .OrderByDescending(kv => kv.Value)
-                .Select(kv => kv.Key)
-                .ToList();
+            recommended.AddRange(matchingEvents);
 
-            // Recommend events from top categories first
-            foreach (var cat in topCategories)
-            {
-                recommended.AddRange(allEvents.Where(e => e.Category == cat && !recommended.Contains(e)));
-            }
-
-            // Then recommend events on top dates
-            foreach (var date in topDates)
-            {
-                recommended.AddRange(allEvents.Where(e => e.Date.Date == date.Date && !recommended.Contains(e)));
-            }
-
-            // Fill remaining slots randomly if needed
-            foreach (var evt in allEvents)
-            {
-                if (recommended.Count >= maxRecommendations) break;
-                if (!recommended.Contains(evt))
-                    recommended.Add(evt);
-            }
-
-            return recommended.Take(maxRecommendations).ToList();
+            return recommended;
         }
+
+
+
 
         // Return search statistics
         public string GetSearchStatistics()
         {
-            var stats = "🔍 Search Statistics:\n";
+            var stats = "🔍 Search Statistics:\n\n";
 
             if (categorySearchCount.Count > 0)
             {
                 stats += "Top Categories:\n";
                 foreach (var kv in categorySearchCount.OrderByDescending(kv => kv.Value))
                     stats += $"• {kv.Key}: {kv.Value} searches\n";
+                stats += "\n";
             }
 
             if (dateSearchCount.Count > 0)
@@ -85,12 +81,29 @@ namespace MunicipalServicesApp.DataStructures
                 stats += "Top Dates:\n";
                 foreach (var kv in dateSearchCount.OrderByDescending(kv => kv.Value))
                     stats += $"• {kv.Key:dd MMM yyyy}: {kv.Value} searches\n";
+                stats += "\n";
             }
 
             if (categorySearchCount.Count == 0 && dateSearchCount.Count == 0)
-                stats += "No searches performed yet.";
+            {
+                stats = "🔍 No search history yet.\n\n";
+                stats += "Showing trending upcoming events based on priority!";
+            }
+            else
+            {
+                int totalSearches = categorySearchCount.Values.Sum() + dateSearchCount.Values.Sum();
+                stats += $"📊 Total Searches: {totalSearches}";
+            }
 
             return stats;
         }
+
+
+        // Helper method to check if user has search history
+        public int GetTotalSearchCount()
+        {
+            return categorySearchCount.Values.Sum() + dateSearchCount.Values.Sum();
+        }
     }
 }
+

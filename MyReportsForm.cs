@@ -2,7 +2,6 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -187,7 +186,8 @@ namespace MunicipalServicesApp
 
                 reportPanel.Controls.Add(new Label { Text = $"Category: {issue.Category}", Font = new Font("Segoe UI", 10, FontStyle.Bold), Location = new Point(10, 10), AutoSize = true });
                 reportPanel.Controls.Add(new Label { Text = $"Date: {issue.DateReported.ToShortDateString()}", Font = new Font("Segoe UI", 9), Location = new Point(10, 30), AutoSize = true });
-                reportPanel.Controls.Add(new Label { Text = $"Location: {issue.Location}", Font = new Font("Segoe UI", 9), Location = new Point(10, 50), AutoSize = true });
+                // FIXED: Changed from issue.Location to issue.FullLocation
+                reportPanel.Controls.Add(new Label { Text = $"Location: {issue.FullLocation}", Font = new Font("Segoe UI", 9), Location = new Point(10, 50), AutoSize = true });
                 reportPanel.Controls.Add(new Label { Text = $"Description: {issue.Description}", Font = new Font("Segoe UI", 9), Location = new Point(10, 70), Size = new Size(reportPanel.Width - 20, 60) });
 
                 mainPanel.Controls.Add(reportPanel);
@@ -293,7 +293,8 @@ namespace MunicipalServicesApp
 
             AddLabel($"Category: {issue.Category}", yPos); yPos += 25;
             AddLabel($"Date: {issue.DateReported}", yPos); yPos += 25;
-            AddLabel($"Location: {issue.Location}", yPos); yPos += 25;
+            // FIXED: Changed from issue.Location to issue.FullLocation
+            AddLabel($"Location: {issue.FullLocation}", yPos); yPos += 25;
             AddLabel($"Description: {issue.Description}", yPos); yPos += 40;
 
             if (issue.AttachedFiles != null && issue.AttachedFiles.Length > 0)
@@ -378,7 +379,6 @@ namespace MunicipalServicesApp
             this.Name = "MyReportsForm";
             this.Load += new System.EventHandler(this.MyReportsForm_Load);
             this.ResumeLayout(false);
-
         }
 
         private void MyReportsForm_Load(object sender, EventArgs e)

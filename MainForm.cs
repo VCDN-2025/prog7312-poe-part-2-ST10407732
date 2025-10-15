@@ -383,5 +383,10 @@ namespace MunicipalServicesApp
         private void headerPlaceholder_Paint(object sender, PaintEventArgs e)
         {
         }
+
+        private void progressBar_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -102,6 +102,7 @@ namespace MunicipalServicesApp
             this.progressBar.Size = new System.Drawing.Size(1000, 60);
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar.TabIndex = 0;
+            this.progressBar.Click += new System.EventHandler(this.progressBar_Click);
             // 
             // cardsPlaceholder
             // 

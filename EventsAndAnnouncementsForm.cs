@@ -30,10 +30,10 @@ namespace MunicipalServicesApp
         private Button btnClearFilters;
         private Button btnShowRecommendations;
         private FlowLayoutPanel eventsContainer;
-        private Panel announcementsPanel;
-        private Panel recommendationsPanel;
+        private ComboBox cmbSort;
+        private Label lblResultCount;
 
-        // Colors
+        // Enhanced Colors
         private static readonly Color PrimaryTeal = Color.FromArgb(0, 123, 139);
         private static readonly Color SecondaryTeal = Color.FromArgb(0, 150, 167);
         private static readonly Color AccentBlue = Color.FromArgb(21, 101, 192);
@@ -42,6 +42,7 @@ namespace MunicipalServicesApp
         private static readonly Color LightGray = Color.FromArgb(248, 249, 250);
         private static readonly Color DarkGray = Color.FromArgb(66, 66, 66);
         private static readonly Color BorderGray = Color.FromArgb(224, 224, 224);
+        private static readonly Color CardShadow = Color.FromArgb(30, 0, 0, 0);
 
         public EventsAndAnnouncementsForm()
         {
@@ -64,7 +65,6 @@ namespace MunicipalServicesApp
 
         private void LoadSampleData()
         {
-            // Load 20+ sample events
             var events = new[]
             {
                 new Event("E001", "Community Clean-Up Day", "Community", new DateTime(2025, 10, 20), "City Park", "Join us for a day of community service", "", 1),
@@ -86,7 +86,33 @@ namespace MunicipalServicesApp
                 new Event("E017", "Park Renovation Update", "Infrastructure", new DateTime(2025, 11, 1), "Riverside Park", "Construction progress and timeline", "", 2),
                 new Event("E018", "Food Drive", "Community", new DateTime(2025, 10, 21), "Various Locations", "Donate non-perishable foods for families in need", "", 1),
                 new Event("E019", "Fire Safety Demonstration", "Safety", new DateTime(2025, 11, 7), "Fire Station", "Learn fire safety and prevention", "", 2),
-                new Event("E020", "Music in the Park", "Culture", new DateTime(2025, 11, 14), "Central Park", "Live music performances every Sunday", "", 3)
+                new Event("E020", "Music in the Park", "Culture", new DateTime(2025, 11, 14), "Central Park", "Live music performances every Sunday", "", 3),
+                // NEW EVENTS
+                new Event("E021", "Vaccination Drive", "Health", new DateTime(2025, 10, 27), "Health Clinic", "Free flu shots for all ages", "", 2),
+                new Event("E022", "Youth Coding Workshop", "Education", new DateTime(2025, 11, 9), "Tech Hub", "Learn programming basics for ages 12-18", "", 2),
+                new Event("E023", "Neighborhood Watch Meeting", "Safety", new DateTime(2025, 10, 23), "Community Hall", "Monthly safety update and planning session", "", 1),
+                new Event("E024", "Marathon Registration", "Sports", new DateTime(2025, 11, 20), "Sports Arena", "Register for the annual city marathon", "", 3),
+                new Event("E025", "Tax Workshop for Seniors", "Government", new DateTime(2025, 11, 6), "Senior Center", "Free tax assistance and advice", "", 2),
+                new Event("E026", "Environmental Film Screening", "Environment", new DateTime(2025, 11, 13), "Town Cinema", "Documentary about climate change", "", 2),
+                new Event("E027", "Career Mentorship Program", "Employment", new DateTime(2025, 10, 29), "Business Center", "Connect with industry professionals", "", 2),
+                new Event("E028", "Bridge Maintenance Alert", "Infrastructure", new DateTime(2025, 10, 31), "River Bridge", "Bridge repairs - expect delays", "", 1),
+                new Event("E029", "Halloween Community Party", "Community", new DateTime(2025, 10, 31), "Town Square", "Family-friendly Halloween celebration", "", 1),
+                new Event("E030", "Poetry Reading Night", "Culture", new DateTime(2025, 11, 16), "Public Library", "Local poets share their work", "", 3),
+                new Event("E031", "Mental Health Awareness", "Health", new DateTime(2025, 11, 11), "Wellness Center", "Free counseling sessions and resources", "", 2),
+                new Event("E032", "Basketball Tournament", "Sports", new DateTime(2025, 11, 19), "Sports Complex", "Youth basketball championship finals", "", 3),
+                new Event("E033", "Town Hall Q&A Session", "Government", new DateTime(2025, 11, 22), "City Hall", "Ask the mayor anything", "", 3),
+                new Event("E034", "Tree Planting Initiative", "Environment", new DateTime(2025, 11, 2), "Memorial Park", "Help plant 100 trees in the community", "", 1),
+                new Event("E035", "Resume Writing Workshop", "Employment", new DateTime(2025, 11, 4), "Career Center", "Professional resume tips and review", "", 2),
+                new Event("E036", "Street Light Upgrades", "Infrastructure", new DateTime(2025, 11, 10), "Downtown Area", "LED street light installation project", "", 1),
+                new Event("E037", "Bingo Night Fundraiser", "Community", new DateTime(2025, 11, 17), "Recreation Center", "Fundraiser for local schools", "", 2),
+                new Event("E038", "Photography Exhibition", "Culture", new DateTime(2025, 11, 21), "Art Gallery", "Local photographers showcase their work", "", 3),
+                new Event("E039", "First Aid Training", "Safety", new DateTime(2025, 11, 23), "Fire Station", "Learn basic first aid and CPR", "", 2),
+                new Event("E040", "Blood Donation Drive", "Health", new DateTime(2025, 11, 24), "Hospital", "Donate blood and save lives", "", 2),
+                new Event("E041", "Chess Tournament", "Sports", new DateTime(2025, 11, 25), "Community Center", "All ages chess competition", "", 2),
+                new Event("E042", "Holiday Market Opening", "Community", new DateTime(2025, 11, 28), "Market Square", "Start your holiday shopping early", "", 3),
+                new Event("E043", "Wildlife Conservation Talk", "Environment", new DateTime(2025, 11, 27), "Nature Center", "Learn about local wildlife protection", "", 2),
+                new Event("E044", "Freelancing Workshop", "Employment", new DateTime(2025, 11, 30), "Co-working Space", "How to start freelancing successfully", "", 3),
+                new Event("E045", "Sidewalk Repairs Notice", "Infrastructure", new DateTime(2025, 11, 26), "Elm Street", "Sidewalk construction for two weeks", "", 1)
             };
 
             foreach (var evt in events)
@@ -97,7 +123,6 @@ namespace MunicipalServicesApp
                 categories.Add(evt.Category);
                 uniqueDates.Add(dateKey);
 
-                // Add to priority queue (upcoming events)
                 if (evt.Date >= DateTime.Now)
                 {
                     upcomingEvents.Enqueue(evt);
@@ -108,11 +133,10 @@ namespace MunicipalServicesApp
         private void BuildUI()
         {
             this.Text = "📢 Local Events & Announcements";
-            this.Size = new Size(1200, 800);
+            this.Size = new Size(1400, 850);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.BackColor = LightGray;
 
-            // Main container
             TableLayoutPanel mainLayout = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
@@ -120,10 +144,10 @@ namespace MunicipalServicesApp
                 ColumnCount = 1,
                 Padding = new Padding(0)
             };
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));  // Header
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 100F)); // Search
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 100F));  // Header
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 140F)); // Search
             mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));  // Content
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));  // Footer
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));  // Footer
 
             // Header
             Panel header = CreateHeader();
@@ -138,17 +162,17 @@ namespace MunicipalServicesApp
             {
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
-                BackColor = LightGray
+                BackColor = LightGray,
+                Padding = new Padding(0, 10, 0, 10)
             };
 
-            // Events container
             eventsContainer = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
                 FlowDirection = FlowDirection.LeftToRight,
                 WrapContents = true,
-                Padding = new Padding(20)
+                Padding = new Padding(25, 10, 25, 10)
             };
             mainPanel.Controls.Add(eventsContainer);
 
@@ -160,31 +184,47 @@ namespace MunicipalServicesApp
 
             this.Controls.Add(mainLayout);
 
-            // Load all events initially
             DisplayEvents(eventsById.GetAllValues());
         }
 
         private Panel CreateHeader()
         {
-            Panel header = new Panel { Dock = DockStyle.Fill };
-            header.Paint += (s, e) =>
+            Panel header = new Panel { Dock = DockStyle.Fill, Padding = new Padding(0) };
+            header.Paint += (s, pe) =>
             {
                 using (LinearGradientBrush brush = new LinearGradientBrush(
                     header.ClientRectangle, PrimaryTeal, SecondaryTeal, LinearGradientMode.Horizontal))
                 {
-                    e.Graphics.FillRectangle(brush, header.ClientRectangle);
+                    pe.Graphics.FillRectangle(brush, header.ClientRectangle);
                 }
             };
 
             Label lblTitle = new Label
             {
                 Text = "📢 LOCAL EVENTS & ANNOUNCEMENTS",
-                Font = new Font("Segoe UI", 20, FontStyle.Bold),
+                Font = new Font("Segoe UI", 24, FontStyle.Bold),
                 ForeColor = Color.White,
-                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+                AutoSize = false,
+                Size = new Size(1400, 60),
+                Location = new Point(0, 10),
                 TextAlign = ContentAlignment.MiddleCenter
             };
+
+            Label lblSubtitle = new Label
+            {
+                Text = "Discover what's happening in your community",
+                Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                ForeColor = Color.FromArgb(230, 255, 255),
+                BackColor = Color.Transparent,
+                AutoSize = false,
+                Size = new Size(1400, 30),
+                Location = new Point(0, 70),
+                TextAlign = ContentAlignment.TopCenter
+            };
+
             header.Controls.Add(lblTitle);
+            header.Controls.Add(lblSubtitle);
 
             return header;
         }
@@ -195,28 +235,32 @@ namespace MunicipalServicesApp
             {
                 Dock = DockStyle.Fill,
                 BackColor = Color.White,
-                Padding = new Padding(20, 10, 20, 10)
+                Padding = new Padding(25, 15, 25, 15)
             };
 
-            // Search textbox
-            txtSearch = new TextBox
+            // Add shadow effect
+            panel.Paint += (s, pe) =>
             {
-                Font = new Font("Segoe UI", 11),
-                Width = 250,
-                Location = new Point(20, 30),
-                Text = "Search events..."
+                Rectangle shadowRect = new Rectangle(0, panel.Height - 3, panel.Width, 3);
+                using (LinearGradientBrush shadowBrush = new LinearGradientBrush(
+                    shadowRect, Color.FromArgb(20, 0, 0, 0), Color.Transparent, 90f))
+                {
+                    pe.Graphics.FillRectangle(shadowBrush, shadowRect);
+                }
             };
-            txtSearch.GotFocus += (s, e) => { if (txtSearch.Text == "Search events...") txtSearch.Text = ""; };
-            txtSearch.LostFocus += (s, e) => { if (string.IsNullOrWhiteSpace(txtSearch.Text)) txtSearch.Text = "Search events..."; };
 
-            // Category dropdown
-            cmbCategory = new ComboBox
+            // Row 1: Search and filters
+            Label lblSearchTitle = new Label
             {
-                Font = new Font("Segoe UI", 11),
-                Width = 180,
-                Location = new Point(290, 30),
-                DropDownStyle = ComboBoxStyle.DropDownList
+                Text = "🔍 Search & Filter Events",
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                ForeColor = DarkGray,
+                Location = new Point(25, 15),
+                AutoSize = true
             };
+
+            txtSearch = CreateStyledTextBox("Search by title or description...", new Point(25, 45), 280);
+            cmbCategory = CreateStyledComboBox(new Point(320, 45), 200);
             cmbCategory.Items.Add("All Categories");
             foreach (var cat in categories.ToList().OrderBy(c => c))
             {
@@ -224,85 +268,122 @@ namespace MunicipalServicesApp
             }
             cmbCategory.SelectedIndex = 0;
 
-            // Date picker
             dtpDate = new DateTimePicker
             {
                 Font = new Font("Segoe UI", 11),
-                Width = 180,
-                Location = new Point(490, 30),
+                Width = 200,
+                Location = new Point(535, 45),
                 Format = DateTimePickerFormat.Short
             };
 
-            // Search button
-            btnSearch = new Button
-            {
-                Text = "🔍 Search",
-                Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                BackColor = AccentBlue,
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Width = 120,
-                Height = 35,
-                Location = new Point(690, 28),
-                Cursor = Cursors.Hand
-            };
-            btnSearch.FlatAppearance.BorderSize = 0;
+            cmbSort = CreateStyledComboBox(new Point(750, 45), 180);
+            cmbSort.Items.AddRange(new string[] { "Sort by Date", "Sort by Category", "Sort by Title" });
+            cmbSort.SelectedIndex = 0;
+
+            // Row 2: Action buttons
+            btnSearch = CreateActionButton("🔍 Search", AccentBlue, new Point(25, 85), 140);
             btnSearch.Click += BtnSearch_Click;
 
-            // Clear filters button
-            btnClearFilters = new Button
-            {
-                Text = "Clear",
-                Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                BackColor = WarningOrange,
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Width = 100,
-                Height = 35,
-                Location = new Point(820, 28),
-                Cursor = Cursors.Hand
-            };
-            btnClearFilters.FlatAppearance.BorderSize = 0;
+            btnClearFilters = CreateActionButton("🔄 Clear", WarningOrange, new Point(175, 85), 130);
             btnClearFilters.Click += BtnClearFilters_Click;
 
-            // Show recommendations button
-            btnShowRecommendations = new Button
-            {
-                Text = "⭐ Recommendations",
-                Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                BackColor = SuccessGreen,
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Width = 180,
-                Height = 35,
-                Location = new Point(940, 28),
-                Cursor = Cursors.Hand
-            };
-            btnShowRecommendations.FlatAppearance.BorderSize = 0;
+            btnShowRecommendations = CreateActionButton("⭐ Recommendations", SuccessGreen, new Point(315, 85), 200);
             btnShowRecommendations.Click += BtnShowRecommendations_Click;
 
+            lblResultCount = new Label
+            {
+                Text = $"Showing {eventsById.GetAllValues().Count} events",
+                Font = new Font("Segoe UI", 10, FontStyle.Regular),
+                ForeColor = Color.Gray,
+                Location = new Point(950, 92),
+                AutoSize = true
+            };
+
             panel.Controls.AddRange(new Control[] {
-                txtSearch, cmbCategory, dtpDate, btnSearch, btnClearFilters, btnShowRecommendations
+                lblSearchTitle, txtSearch, cmbCategory, dtpDate, cmbSort,
+                btnSearch, btnClearFilters, btnShowRecommendations, lblResultCount
             });
 
             return panel;
         }
 
+        private TextBox CreateStyledTextBox(string placeholder, Point location, int width)
+        {
+            TextBox txt = new TextBox
+            {
+                Font = new Font("Segoe UI", 11),
+                Width = width,
+                Location = location,
+                Text = placeholder,
+                ForeColor = Color.Gray
+            };
+            txt.GotFocus += (s, e) => {
+                if (txt.Text == placeholder)
+                {
+                    txt.Text = "";
+                    txt.ForeColor = DarkGray;
+                }
+            };
+            txt.LostFocus += (s, e) => {
+                if (string.IsNullOrWhiteSpace(txt.Text))
+                {
+                    txt.Text = placeholder;
+                    txt.ForeColor = Color.Gray;
+                }
+            };
+            return txt;
+        }
+
+        private ComboBox CreateStyledComboBox(Point location, int width)
+        {
+            return new ComboBox
+            {
+                Font = new Font("Segoe UI", 11),
+                Width = width,
+                Location = location,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                FlatStyle = FlatStyle.Flat
+            };
+        }
+
+        private Button CreateActionButton(string text, Color color, Point location, int width)
+        {
+            Button btn = new Button
+            {
+                Text = text,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                BackColor = color,
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Width = width,
+                Height = 40,
+                Location = location,
+                Cursor = Cursors.Hand
+            };
+            btn.FlatAppearance.BorderSize = 0;
+
+            Color hoverColor = ControlPaint.Light(color, 0.2f);
+            btn.MouseEnter += (s, e) => btn.BackColor = hoverColor;
+            btn.MouseLeave += (s, e) => btn.BackColor = color;
+
+            return btn;
+        }
+
         private Panel CreateFooter()
         {
             Panel footer = new Panel { Dock = DockStyle.Fill };
-            footer.Paint += (s, e) =>
+            footer.Paint += (s, pe) =>
             {
                 using (LinearGradientBrush brush = new LinearGradientBrush(
                     footer.ClientRectangle, PrimaryTeal, SecondaryTeal, LinearGradientMode.Horizontal))
                 {
-                    e.Graphics.FillRectangle(brush, footer.ClientRectangle);
+                    pe.Graphics.FillRectangle(brush, footer.ClientRectangle);
                 }
             };
 
             Label lblFooter = new Label
             {
-                Text = "📞 Contact: 0800-123-456  |  ✉️ events@municipality.gov.za  |  © 2025 Municipal Services",
+                Text = "📞 0800-123-456  |  ✉️ events@municipality.gov.za  |  © 2025 Municipal Services",
                 ForeColor = Color.White,
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -319,113 +400,180 @@ namespace MunicipalServicesApp
 
             if (events == null || events.Count == 0)
             {
+                Panel noEventsPanel = new Panel
+                {
+                    Width = 400,
+                    Height = 200,
+                    BackColor = Color.White
+                };
+                noEventsPanel.Paint += (s, pe) =>
+                {
+                    pe.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    var path = GetRoundedRectanglePath(new Rectangle(0, 0, noEventsPanel.Width, noEventsPanel.Height), 12);
+                    using (var brush = new SolidBrush(Color.White))
+                        pe.Graphics.FillPath(brush, path);
+                };
+
                 Label noEvents = new Label
                 {
-                    Text = "No events found matching your criteria.",
-                    Font = new Font("Segoe UI", 14),
-                    ForeColor = DarkGray,
-                    AutoSize = true,
-                    Padding = new Padding(20)
+                    Text = "❌ No Events Found\n\nTry adjusting your search filters",
+                    Font = new Font("Segoe UI", 12),
+                    ForeColor = Color.Gray,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Dock = DockStyle.Fill
                 };
-                eventsContainer.Controls.Add(noEvents);
+                noEventsPanel.Controls.Add(noEvents);
+                eventsContainer.Controls.Add(noEventsPanel);
+
+                if (lblResultCount != null)
+                    lblResultCount.Text = "No events found";
                 return;
             }
 
-            foreach (var evt in events.OrderBy(e => e.Date))
+            var sortedEvents = events;
+            if (cmbSort != null && cmbSort.SelectedIndex >= 0)
+            {
+                switch (cmbSort.SelectedIndex)
+                {
+                    case 0: sortedEvents = events.OrderBy(e => e.Date).ToList(); break;
+                    case 1: sortedEvents = events.OrderBy(e => e.Category).ThenBy(e => e.Date).ToList(); break;
+                    case 2: sortedEvents = events.OrderBy(e => e.Title).ToList(); break;
+                }
+            }
+
+            foreach (var evt in sortedEvents)
             {
                 eventsContainer.Controls.Add(CreateEventCard(evt));
             }
+
+            if (lblResultCount != null)
+                lblResultCount.Text = $"Showing {events.Count} event{(events.Count != 1 ? "s" : "")}";
         }
 
         private Panel CreateEventCard(Event evt)
         {
             Panel card = new Panel
             {
-                Width = 340,
-                Height = 220,
-                Margin = new Padding(10),
+                Width = 380,
+                Height = 240,
+                Margin = new Padding(12),
                 Cursor = Cursors.Hand,
-                Tag = evt
+                Tag = evt,
+                BackColor = Color.White
             };
 
-            card.Paint += (s, e) =>
+            card.Paint += (s, pe) =>
             {
-                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                var rect = new Rectangle(2, 2, card.Width - 4, card.Height - 4);
+                pe.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                // Shadow
+                var shadowRect = new Rectangle(4, 4, card.Width - 4, card.Height - 4);
+                var shadowPath = GetRoundedRectanglePath(shadowRect, 12);
+                using (var shadowBrush = new SolidBrush(CardShadow))
+                    pe.Graphics.FillPath(shadowBrush, shadowPath);
+
+                // Card background
+                var rect = new Rectangle(0, 0, card.Width - 6, card.Height - 6);
                 var path = GetRoundedRectanglePath(rect, 12);
-
                 using (var brush = new SolidBrush(Color.White))
-                    e.Graphics.FillPath(brush, path);
-                using (var borderPen = new Pen(BorderGray, 2))
-                    e.Graphics.DrawPath(borderPen, path);
+                    pe.Graphics.FillPath(brush, path);
+                using (var borderPen = new Pen(BorderGray, 1))
+                    pe.Graphics.DrawPath(borderPen, path);
 
-                // Category color strip
+                // Category accent strip - THICKER
                 Color categoryColor = GetCategoryColor(evt.Category);
                 using (var accentBrush = new SolidBrush(categoryColor))
-                    e.Graphics.FillRectangle(accentBrush, 0, 0, card.Width, 8);
+                {
+                    var accentPath = new GraphicsPath();
+                    accentPath.AddArc(0, 0, 24, 24, 180, 90);
+                    accentPath.AddLine(12, 0, card.Width - 18, 0);
+                    accentPath.AddArc(card.Width - 30, 0, 24, 24, 270, 90);
+                    accentPath.AddLine(card.Width - 6, 12, 0, 12);
+                    accentPath.CloseFigure();
+                    pe.Graphics.FillPath(accentBrush, accentPath);
+                }
             };
 
-            // Date badge
+            // Date badge - MORE PROMINENT
             Panel dateBadge = new Panel
             {
-                Size = new Size(60, 60),
-                Location = new Point(15, 20),
-                BackColor = AccentBlue
+                Size = new Size(75, 75),
+                Location = new Point(18, 28),
+                BackColor = Color.Transparent
             };
-            dateBadge.Paint += (s, e) =>
+            dateBadge.Paint += (s, pe) =>
             {
-                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                pe.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
                 using (var brush = new SolidBrush(AccentBlue))
-                    e.Graphics.FillEllipse(brush, 0, 0, 60, 60);
+                    pe.Graphics.FillEllipse(brush, 0, 0, 75, 75);
+                using (var borderPen = new Pen(Color.White, 4))
+                    pe.Graphics.DrawEllipse(borderPen, 2, 2, 71, 71);
             };
 
             Label lblDay = new Label
             {
                 Text = evt.Date.Day.ToString(),
-                Font = new Font("Segoe UI", 18, FontStyle.Bold),
+                Font = new Font("Segoe UI", 24, FontStyle.Bold),
                 ForeColor = Color.White,
                 TextAlign = ContentAlignment.MiddleCenter,
-                Dock = DockStyle.Top,
-                Height = 30
+                BackColor = Color.Transparent,
+                Location = new Point(0, 14),
+                Size = new Size(75, 35)
             };
             Label lblMonth = new Label
             {
-                Text = evt.Date.ToString("MMM"),
-                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                Text = evt.Date.ToString("MMM").ToUpper(),
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
                 ForeColor = Color.White,
-                TextAlign = ContentAlignment.MiddleCenter,
-                Dock = DockStyle.Fill
+                TextAlign = ContentAlignment.TopCenter,
+                BackColor = Color.Transparent,
+                Location = new Point(0, 48),
+                Size = new Size(75, 22)
             };
-            dateBadge.Controls.Add(lblMonth);
             dateBadge.Controls.Add(lblDay);
+            dateBadge.Controls.Add(lblMonth);
 
-            // Event details
+            // Title - BIGGER AND BOLDER
             Label lblTitle = new Label
             {
                 Text = evt.Title,
-                Font = new Font("Segoe UI", 12, FontStyle.Bold),
-                ForeColor = DarkGray,
-                Location = new Point(85, 20),
-                Size = new Size(240, 50),
+                Font = new Font("Segoe UI", 14, FontStyle.Bold),
+                ForeColor = Color.FromArgb(33, 33, 33),
+                BackColor = Color.Transparent,
+                Location = new Point(105, 28),
+                Size = new Size(260, 60),
                 AutoEllipsis = true
+            };
+
+            // Category badge - MORE VISIBLE
+            Panel categoryBadge = new Panel
+            {
+                Location = new Point(105, 88),
+                Size = new Size(260, 26),
+                BackColor = Color.Transparent
             };
 
             Label lblCategory = new Label
             {
                 Text = $"📁 {evt.Category}",
-                Font = new Font("Segoe UI", 9, FontStyle.Regular),
-                ForeColor = GetCategoryColor(evt.Category),
-                Location = new Point(85, 75),
-                AutoSize = true
+                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                ForeColor = Color.White,
+                BackColor = GetCategoryColor(evt.Category),
+                TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(8, 4, 8, 4),
+                AutoSize = true,
+                Location = new Point(0, 0)
             };
+            categoryBadge.Controls.Add(lblCategory);
 
             Label lblLocation = new Label
             {
                 Text = $"📍 {evt.Location}",
-                Font = new Font("Segoe UI", 9),
-                ForeColor = Color.Gray,
-                Location = new Point(15, 95),
-                Size = new Size(310, 20),
+                Font = new Font("Segoe UI", 10, FontStyle.Regular),
+                ForeColor = Color.FromArgb(90, 90, 90),
+                BackColor = Color.Transparent,
+                Location = new Point(18, 120),
+                Size = new Size(350, 24),
                 AutoEllipsis = true
             };
 
@@ -433,29 +581,49 @@ namespace MunicipalServicesApp
             {
                 Text = evt.Description,
                 Font = new Font("Segoe UI", 9),
-                ForeColor = Color.Gray,
-                Location = new Point(15, 120),
-                Size = new Size(310, 60),
+                ForeColor = Color.FromArgb(110, 110, 110),
+                BackColor = Color.Transparent,
+                Location = new Point(18, 148),
+                Size = new Size(350, 50),
                 AutoEllipsis = true
+            };
+
+            // Action panel - MORE PROMINENT
+            Panel actionPanel = new Panel
+            {
+                Location = new Point(0, 203),
+                Size = new Size(card.Width - 6, 37),
+                BackColor = Color.FromArgb(240, 245, 250)
+            };
+            actionPanel.Paint += (s, pe) =>
+            {
+                pe.Graphics.DrawLine(new Pen(Color.FromArgb(200, 200, 200), 2), 0, 0, actionPanel.Width, 0);
             };
 
             Label lblViewDetails = new Label
             {
-                Text = "Click to view details →",
-                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                Text = "View Full Details →",
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
                 ForeColor = AccentBlue,
-                Location = new Point(15, 185),
-                AutoSize = true
+                BackColor = Color.Transparent,
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Cursor = Cursors.Hand
             };
+            actionPanel.Controls.Add(lblViewDetails);
 
             card.Controls.AddRange(new Control[] {
-                dateBadge, lblTitle, lblCategory, lblLocation, lblDescription, lblViewDetails
+                actionPanel, dateBadge, lblTitle, categoryBadge, lblLocation, lblDescription
             });
 
             card.Click += (s, e) => ShowEventDetails(evt);
             foreach (Control ctrl in card.Controls)
             {
                 ctrl.Click += (s, e) => ShowEventDetails(evt);
+                foreach (Control subCtrl in ctrl.Controls)
+                {
+                    subCtrl.Click += (s, e) => ShowEventDetails(evt);
+                }
             }
 
             return card;
@@ -480,13 +648,12 @@ namespace MunicipalServicesApp
 
         private void BtnSearch_Click(object sender, EventArgs e)
         {
-            string searchText = txtSearch.Text == "Search events..." ? "" : txtSearch.Text;
+            string searchText = txtSearch.Text == "Search by title or description..." ? "" : txtSearch.Text;
             string selectedCategory = cmbCategory.SelectedItem?.ToString();
             DateTime selectedDate = dtpDate.Value.Date;
 
             var filteredEvents = eventsById.GetAllValues();
 
-            // Filter by text search
             if (!string.IsNullOrWhiteSpace(searchText))
             {
                 filteredEvents = filteredEvents
@@ -495,14 +662,12 @@ namespace MunicipalServicesApp
                     .ToList();
             }
 
-            // Filter by category
             if (selectedCategory != "All Categories" && !string.IsNullOrEmpty(selectedCategory))
             {
                 filteredEvents = filteredEvents.Where(ev => ev.Category == selectedCategory).ToList();
                 recommendationEngine.TrackCategorySearch(selectedCategory);
             }
 
-            // Filter by date
             bool filterByDate = MessageBox.Show("Filter by selected date?", "Date Filter",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
 
@@ -517,87 +682,272 @@ namespace MunicipalServicesApp
 
         private void BtnClearFilters_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = "Search events...";
+            txtSearch.Text = "Search by title or description...";
+            txtSearch.ForeColor = Color.Gray;
             cmbCategory.SelectedIndex = 0;
+            cmbSort.SelectedIndex = 0;
             dtpDate.Value = DateTime.Now;
             DisplayEvents(eventsById.GetAllValues());
         }
+
+
+
+
+
 
         private void BtnShowRecommendations_Click(object sender, EventArgs e)
         {
             var allEvents = eventsById.GetAllValues();
             var recommendations = recommendationEngine.GetRecommendedEvents(allEvents, 6);
+            bool hasSearchHistory = recommendationEngine.GetTotalSearchCount() > 0;
 
-            if (recommendations.Count == 0)
-            {
-                MessageBox.Show("Start searching for events to get personalized recommendations!",
-                    "No Recommendations Yet", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
+            // === FORM SETUP ===
             Form recForm = new Form
             {
-                Text = "⭐ Recommended Events For You",
-                Size = new Size(900, 600),
-                StartPosition = FormStartPosition.CenterParent,
-                BackColor = LightGray
+                Text = "⭐ Event Recommendations",
+                Size = new Size(1400, 950),
+                StartPosition = FormStartPosition.CenterScreen,
+                BackColor = LightGray,
+                WindowState = FormWindowState.Normal,
+                MaximizeBox = true
             };
 
-            Panel header = new Panel
-            {
-                Dock = DockStyle.Top,
-                Height = 100,
-                BackColor = SuccessGreen
-            };
-            Label lblHeader = new Label
-            {
-                Text = "⭐ PERSONALIZED RECOMMENDATIONS\nBased on your search history",
-                Font = new Font("Segoe UI", 16, FontStyle.Bold),
-                ForeColor = Color.White,
-                Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleCenter
-            };
-            header.Controls.Add(lblHeader);
-
-            FlowLayoutPanel recFlow = new FlowLayoutPanel
+            // === SCROLLABLE MAIN CONTAINER ===
+            Panel mainContainer = new Panel
             {
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
-                FlowDirection = FlowDirection.LeftToRight,
-                WrapContents = true,
-                Padding = new Padding(20)
+                BackColor = LightGray
             };
 
-            foreach (var evt in recommendations)
+            int yPosition = 20;
+
+            // === SECTION 1: PERSONALIZED RECOMMENDATIONS (IF USER HAS SEARCH HISTORY) ===
+            if (hasSearchHistory)
             {
-                recFlow.Controls.Add(CreateEventCard(evt));
+                var personalizedEvents = recommendations.Take(6).ToList();
+
+                Panel personalizedHeader = new Panel
+                {
+                    Location = new Point(0, yPosition),
+                    Size = new Size(1180, 100),
+                    BackColor = SuccessGreen
+                };
+                personalizedHeader.Paint += (s, pe) =>
+                {
+                    using (LinearGradientBrush brush = new LinearGradientBrush(
+                        personalizedHeader.ClientRectangle, SuccessGreen, Color.FromArgb(102, 187, 106), LinearGradientMode.Horizontal))
+                    {
+                        pe.Graphics.FillRectangle(brush, personalizedHeader.ClientRectangle);
+                    }
+                };
+
+                Label lblPersonalizedTitle = new Label
+                {
+                    Text = "⭐ FOR YOU - Based on Your Searches",
+                    Font = new Font("Segoe UI", 18, FontStyle.Bold),
+                    ForeColor = Color.White,
+                    BackColor = Color.Transparent,
+                    AutoSize = false,
+                    Size = new Size(1100, 50),
+                    Location = new Point(40, 15),
+                    TextAlign = ContentAlignment.MiddleLeft
+                };
+
+                Label lblPersonalizedSubtitle = new Label
+                {
+                    Text = "Events matching your interests and search history",
+                    Font = new Font("Segoe UI", 11),
+                    ForeColor = Color.FromArgb(230, 255, 230),
+                    BackColor = Color.Transparent,
+                    AutoSize = false,
+                    Size = new Size(1100, 30),
+                    Location = new Point(40, 60),
+                    TextAlign = ContentAlignment.TopLeft
+                };
+
+                personalizedHeader.Controls.Add(lblPersonalizedTitle);
+                personalizedHeader.Controls.Add(lblPersonalizedSubtitle);
+                mainContainer.Controls.Add(personalizedHeader);
+                yPosition += 100;
+                FlowLayoutPanel personalizedFlow = new FlowLayoutPanel
+                {
+                    Location = new Point(20, yPosition),
+                    Size = new Size(1150, 350),  // Enough height for one row of cards
+                    FlowDirection = FlowDirection.LeftToRight,
+                    WrapContents = true,
+                    Padding = new Padding(10),
+                    BackColor = LightGray,
+                    AutoScroll = false
+                };
+
+                // Calculate width to fit exactly 3 cards per row
+                int cardGap = 10; // Gap between cards
+                int totalPadding = personalizedFlow.Padding.Left + personalizedFlow.Padding.Right;
+                int totalGaps = cardGap * 2; // 2 gaps between 3 cards
+                int availableWidth = personalizedFlow.Width - totalPadding - totalGaps;
+                int cardWidth = availableWidth / 3;
+
+                foreach (var evt in personalizedEvents)
+                {
+                    var card = CreateEventCard(evt);
+                    card.Width = cardWidth;  // Force width for 3 cards per row
+                    card.Margin = new Padding(0, 0, cardGap, 0); // Add gap to the right of each card
+                    personalizedFlow.Controls.Add(card);
+                }
+
+                mainContainer.Controls.Add(personalizedFlow);
+                yPosition += 370; // Adjust vertical spacing for next section
+
+
+                // Divider
+                Panel divider = new Panel
+                {
+                    Location = new Point(40, yPosition),
+                    Size = new Size(1100, 3),
+                    BackColor = BorderGray
+                };
+                mainContainer.Controls.Add(divider);
+                yPosition += 25;
             }
 
+            // === SECTION 2: TRENDING EVENTS (ALWAYS SHOW 3) ===
+            var trendingEvents = allEvents
+                .Where(ev => ev.Date >= DateTime.Now && ev.Priority >= 2)
+                .OrderByDescending(ev => ev.Priority)
+                .ThenBy(ev => ev.Date)
+                .Take(3) // ✅ Always only 3 events
+                .ToList();
+
+            Panel trendingHeader = new Panel
+            {
+                Location = new Point(0, yPosition),
+                Size = new Size(1180, 90),
+                BackColor = AccentBlue
+            };
+            trendingHeader.Paint += (s, pe) =>
+            {
+                using (LinearGradientBrush brush = new LinearGradientBrush(
+                    trendingHeader.ClientRectangle, AccentBlue, Color.FromArgb(48, 123, 204), LinearGradientMode.Horizontal))
+                {
+                    pe.Graphics.FillRectangle(brush, trendingHeader.ClientRectangle);
+                }
+            };
+
+            Label lblTrendingTitle = new Label
+            {
+                Text = "🔥 TRENDING EVENTS - Popular in Your Area",
+                Font = new Font("Segoe UI", 16, FontStyle.Bold),
+                ForeColor = Color.White,
+                BackColor = Color.Transparent,
+                AutoSize = false,
+                Size = new Size(1100, 45),
+                Location = new Point(40, 15),
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            Label lblTrendingSubtitle = new Label
+            {
+                Text = "High-priority upcoming events in the community",
+                Font = new Font("Segoe UI", 10),
+                ForeColor = Color.FromArgb(220, 240, 255),
+                BackColor = Color.Transparent,
+                AutoSize = false,
+                Size = new Size(1100, 25),
+                Location = new Point(40, 55),
+                TextAlign = ContentAlignment.TopLeft
+            };
+
+            trendingHeader.Controls.Add(lblTrendingTitle);
+            trendingHeader.Controls.Add(lblTrendingSubtitle);
+            mainContainer.Controls.Add(trendingHeader);
+            yPosition += 90;
+
+            FlowLayoutPanel trendingFlow = new FlowLayoutPanel
+            {
+                Location = new Point(20, yPosition),
+                Size = new Size(1150, 280),
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = false,
+                AutoScroll = true,
+                Padding = new Padding(10),
+                BackColor = Color.FromArgb(250, 250, 252)
+            };
+
+            foreach (var evt in trendingEvents)
+                trendingFlow.Controls.Add(CreateEventCard(evt));
+
+            mainContainer.Controls.Add(trendingFlow);
+            yPosition += 300;
+
+            // === BEAUTIFUL STATISTICS PANEL ===
             Panel statsPanel = new Panel
             {
                 Dock = DockStyle.Bottom,
-                Height = 80,
-                BackColor = Color.WhiteSmoke,
-                Padding = new Padding(20)
+                Height = 140,
+                BackColor = Color.FromArgb(242, 245, 249),
+                Padding = new Padding(25, 10, 25, 10),
+                BorderStyle = BorderStyle.None
             };
+
+            // Top line
+            Panel line = new Panel
+            {
+                Dock = DockStyle.Top,
+                Height = 2,
+                BackColor = Color.FromArgb(210, 210, 210)
+            };
+            statsPanel.Controls.Add(line);
+
+            Label lblStatsTitle = new Label
+            {
+                Text = "📈 Search Activity Summary",
+                Font = new Font("Segoe UI Semibold", 12, FontStyle.Bold),
+                ForeColor = Color.FromArgb(45, 60, 90),
+                Location = new Point(30, 20),
+                AutoSize = true
+            };
+            statsPanel.Controls.Add(lblStatsTitle);
+
             Label lblStats = new Label
             {
                 Text = recommendationEngine.GetSearchStatistics(),
-                Font = new Font("Segoe UI", 9),
-                ForeColor = DarkGray,
-                Dock = DockStyle.Fill
+                Font = new Font("Segoe UI", 10),
+                ForeColor = Color.FromArgb(70, 70, 70),
+                Location = new Point(30, 55),
+                Size = new Size(1250, 70),
+                BackColor = Color.Transparent
             };
             statsPanel.Controls.Add(lblStats);
 
-            recForm.Controls.Add(recFlow);
-            recForm.Controls.Add(header);
-            recForm.Controls.Add(statsPanel);
+            statsPanel.Paint += (s, ev) =>
+            {
+                using (Pen p = new Pen(Color.FromArgb(200, 200, 200), 1))
+                {
+                    ev.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    ev.Graphics.DrawRectangle(p, 0, 0, statsPanel.Width - 1, statsPanel.Height - 1);
+                }
+            };
+
+            // === FINAL CONTAINER ===
+            Panel outerContainer = new Panel
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.White
+            };
+
+            mainContainer.Dock = DockStyle.Fill;
+            outerContainer.Controls.Add(mainContainer);
+            outerContainer.Controls.Add(statsPanel);
+
+            recForm.Controls.Add(outerContainer);
             recForm.ShowDialog();
         }
 
+
+
         private void ShowEventDetails(Event evt)
         {
-            // Add to recently viewed
             if (recentlyViewedEvents.Count >= 5)
             {
                 recentlyViewedEvents.Dequeue();
@@ -607,23 +957,41 @@ namespace MunicipalServicesApp
             Form detailForm = new Form
             {
                 Text = "Event Details",
-                Size = new Size(600, 500),
+                Size = new Size(700, 650),
                 StartPosition = FormStartPosition.CenterParent,
-                BackColor = Color.White
+                BackColor = LightGray,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false,
+                MinimizeBox = false
             };
 
             Panel headerPanel = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = 80,
-                BackColor = GetCategoryColor(evt.Category)
+                Height = 120,
+                Padding = new Padding(30)
             };
+            headerPanel.Paint += (s, pe) =>
+            {
+                using (LinearGradientBrush brush = new LinearGradientBrush(
+                    headerPanel.ClientRectangle,
+                    GetCategoryColor(evt.Category),
+                    ControlPaint.Light(GetCategoryColor(evt.Category), 0.3f),
+                    LinearGradientMode.Horizontal))
+                {
+                    pe.Graphics.FillRectangle(brush, headerPanel.ClientRectangle);
+                }
+            };
+
             Label lblDetailTitle = new Label
             {
                 Text = evt.Title,
-                Font = new Font("Segoe UI", 18, FontStyle.Bold),
+                Font = new Font("Segoe UI", 20, FontStyle.Bold),
                 ForeColor = Color.White,
-                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+                AutoSize = false,
+                Size = new Size(620, 100),
+                Location = new Point(20, 10),
                 TextAlign = ContentAlignment.MiddleCenter
             };
             headerPanel.Controls.Add(lblDetailTitle);
@@ -631,39 +999,129 @@ namespace MunicipalServicesApp
             Panel contentPanel = new Panel
             {
                 Dock = DockStyle.Fill,
-                Padding = new Padding(30),
-                AutoScroll = true
+                Padding = new Padding(40, 30, 40, 30),
+                AutoScroll = true,
+                BackColor = Color.White
             };
 
-            int yPos = 10;
-            void AddDetailLabel(string label, string value)
+            int yPos = 20;
+            void AddDetailRow(string icon, string label, string value, Color color)
             {
-                Label lbl = new Label
+                Panel row = new Panel
                 {
-                    Text = $"{label}: {value}",
-                    Font = new Font("Segoe UI", 11),
                     Location = new Point(10, yPos),
-                    Size = new Size(520, 30),
-                    ForeColor = DarkGray
+                    Size = new Size(580, 65),
+                    BackColor = Color.FromArgb(248, 249, 250)
                 };
-                contentPanel.Controls.Add(lbl);
-                yPos += 35;
+                row.Paint += (s, pe) =>
+                {
+                    var path = GetRoundedRectanglePath(new Rectangle(0, 0, row.Width, row.Height), 8);
+                    using (var brush = new SolidBrush(Color.FromArgb(248, 249, 250)))
+                    {
+                        pe.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                        pe.Graphics.FillPath(brush, path);
+                    }
+                };
+
+                Label lblIcon = new Label
+                {
+                    Text = icon,
+                    Font = new Font("Segoe UI", 18),
+                    BackColor = Color.Transparent,
+                    Location = new Point(15, 18),
+                    Size = new Size(40, 30)
+                };
+
+                Label lblLabel = new Label
+                {
+                    Text = label,
+                    Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                    ForeColor = color,
+                    BackColor = Color.Transparent,
+                    Location = new Point(65, 12),
+                    Size = new Size(500, 20),
+                    AutoEllipsis = false
+                };
+
+                Label lblValue = new Label
+                {
+                    Text = value,
+                    Font = new Font("Segoe UI", 11),
+                    ForeColor = DarkGray,
+                    BackColor = Color.Transparent,
+                    Location = new Point(65, 32),
+                    Size = new Size(500, 25),
+                    AutoEllipsis = false
+                };
+
+                row.Controls.Add(lblIcon);
+                row.Controls.Add(lblLabel);
+                row.Controls.Add(lblValue);
+                contentPanel.Controls.Add(row);
+                yPos += 75;
             }
 
-            AddDetailLabel("📁 Category", evt.Category);
-            AddDetailLabel("📅 Date", evt.Date.ToString("dddd, MMMM dd, yyyy"));
-            AddDetailLabel("📍 Location", evt.Location);
-            AddDetailLabel("📝 Description", "");
+            AddDetailRow("📁", "CATEGORY", evt.Category, GetCategoryColor(evt.Category));
+            AddDetailRow("📅", "DATE & TIME", evt.Date.ToString("dddd, MMMM dd, yyyy"), AccentBlue);
+            AddDetailRow("📍", "LOCATION", evt.Location, WarningOrange);
+
+            // Description section
+            Panel descPanel = new Panel
+            {
+                Location = new Point(10, yPos),
+                Size = new Size(580, 160),
+                BackColor = Color.FromArgb(248, 249, 250)
+            };
+            descPanel.Paint += (s, pe) =>
+            {
+                var path = GetRoundedRectanglePath(new Rectangle(0, 0, descPanel.Width, descPanel.Height), 8);
+                using (var brush = new SolidBrush(Color.FromArgb(248, 249, 250)))
+                {
+                    pe.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    pe.Graphics.FillPath(brush, path);
+                }
+            };
+
+            Label lblDescTitle = new Label
+            {
+                Text = "📝 DESCRIPTION",
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                ForeColor = SuccessGreen,
+                BackColor = Color.Transparent,
+                Location = new Point(20, 15),
+                AutoSize = true
+            };
 
             Label lblDesc = new Label
             {
                 Text = evt.Description,
-                Font = new Font("Segoe UI", 10),
-                Location = new Point(30, yPos),
-                Size = new Size(500, 100),
-                ForeColor = Color.Gray
+                Font = new Font("Segoe UI", 11),
+                ForeColor = DarkGray,
+                BackColor = Color.Transparent,
+                Location = new Point(20, 45),
+                Size = new Size(540, 100),
+                AutoEllipsis = false
             };
-            contentPanel.Controls.Add(lblDesc);
+
+            descPanel.Controls.Add(lblDescTitle);
+            descPanel.Controls.Add(lblDesc);
+            contentPanel.Controls.Add(descPanel);
+
+            // Close button
+            Button btnClose = new Button
+            {
+                Text = "Close",
+                Font = new Font("Segoe UI", 11, FontStyle.Bold),
+                BackColor = DarkGray,
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Size = new Size(150, 45),
+                Location = new Point(215, yPos + 180),
+                Cursor = Cursors.Hand
+            };
+            btnClose.FlatAppearance.BorderSize = 0;
+            btnClose.Click += (s, e) => detailForm.Close();
+            contentPanel.Controls.Add(btnClose);
 
             detailForm.Controls.Add(contentPanel);
             detailForm.Controls.Add(headerPanel);
@@ -684,8 +1142,6 @@ namespace MunicipalServicesApp
 
         private void EventsAndAnnouncementsForm_Load(object sender, EventArgs e)
         {
-
         }
     }
-
 }

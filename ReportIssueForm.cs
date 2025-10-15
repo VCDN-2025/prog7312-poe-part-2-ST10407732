@@ -38,14 +38,38 @@ namespace MunicipalServicesApp
 
             // Layout rows
             mainLayout.RowStyles.Clear();
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 8; i++) // extra rows for city/area
                 mainLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
-            // Location
+            // Location - Populate Provinces
             lblLocation.Text = "📍 Location:";
             lblLocation.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             lblLocation.ForeColor = DarkGray;
-            txtLocation.Font = new Font("Segoe UI", 11F);
+
+            cmbProvince.Font = new Font("Segoe UI", 11F);
+            cmbCity.Font = new Font("Segoe UI", 11F);
+            cmbArea.Font = new Font("Segoe UI", 11F);
+
+            cmbProvince.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbCity.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbArea.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            cmbProvince.SelectedIndexChanged += cmbProvince_SelectedIndexChanged;
+            cmbCity.SelectedIndexChanged += cmbCity_SelectedIndexChanged;
+
+            cmbProvince.Items.AddRange(new string[]
+            {
+                "KwaZulu-Natal",
+                "Gauteng",
+                "Western Cape",
+                "Eastern Cape",
+                "Free State",
+                "Limpopo",
+                "Mpumalanga",
+                "North West",
+                "Northern Cape"
+            });
+            cmbProvince.SelectedIndex = 0;
 
             // Category
             lblCategory.Text = "📂 Category:";
@@ -135,16 +159,18 @@ namespace MunicipalServicesApp
 
             // Add controls to layout
             mainLayout.Controls.Add(lblLocation, 0, 0);
-            mainLayout.Controls.Add(txtLocation, 1, 0);
-            mainLayout.Controls.Add(lblCategory, 0, 1);
-            mainLayout.Controls.Add(cmbCategory, 1, 1);
-            mainLayout.Controls.Add(lblDescription, 0, 2);
-            mainLayout.Controls.Add(rtbDescription, 1, 2);
-            mainLayout.Controls.Add(lblAttachments, 0, 3);
-            mainLayout.Controls.Add(lstAttachments, 1, 3);
-            mainLayout.Controls.Add(btnAddAttachment, 1, 4);
-            mainLayout.Controls.Add(btnSubmit, 0, 5);
-            mainLayout.Controls.Add(btnBackToMenu, 1, 5);
+            mainLayout.Controls.Add(cmbProvince, 1, 0);
+            mainLayout.Controls.Add(cmbCity, 1, 1);
+            mainLayout.Controls.Add(cmbArea, 1, 2);
+            mainLayout.Controls.Add(lblCategory, 0, 3);
+            mainLayout.Controls.Add(cmbCategory, 1, 3);
+            mainLayout.Controls.Add(lblDescription, 0, 4);
+            mainLayout.Controls.Add(rtbDescription, 1, 4);
+            mainLayout.Controls.Add(lblAttachments, 0, 5);
+            mainLayout.Controls.Add(lstAttachments, 1, 5);
+            mainLayout.Controls.Add(btnAddAttachment, 1, 6);
+            mainLayout.Controls.Add(btnSubmit, 0, 7);
+            mainLayout.Controls.Add(btnBackToMenu, 1, 7);
 
             // Load issues
             issueList = IssueStorage.Load();
@@ -154,6 +180,53 @@ namespace MunicipalServicesApp
             string logoPath = @"C:\Users\davyc\source\repos\MunicipalServicesApp\MunicipalityLogo.png";
             if (System.IO.File.Exists(logoPath))
                 picLogo.Image = Image.FromFile(logoPath);
+        }
+
+        private void cmbProvince_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cmbCity.Items.Clear();
+            cmbArea.Items.Clear();
+
+            switch (cmbProvince.SelectedItem.ToString())
+            {
+                case "KwaZulu-Natal":
+                    cmbCity.Items.AddRange(new string[] { "Durban", "Pietermaritzburg", "Richards Bay" });
+                    break;
+                case "Gauteng":
+                    cmbCity.Items.AddRange(new string[] { "Johannesburg", "Pretoria", "Soweto" });
+                    break;
+                case "Western Cape":
+                    cmbCity.Items.AddRange(new string[] { "Cape Town", "Stellenbosch", "George" });
+                    break;
+                default:
+                    cmbCity.Items.Add("Other");
+                    break;
+            }
+
+            cmbCity.SelectedIndex = 0;
+        }
+
+        private void cmbCity_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cmbArea.Items.Clear();
+
+            switch (cmbCity.SelectedItem.ToString())
+            {
+                case "Durban":
+                    cmbArea.Items.AddRange(new string[] { "Umhlanga", "Berea", "Chatsworth", "Phoenix" });
+                    break;
+                case "Johannesburg":
+                    cmbArea.Items.AddRange(new string[] { "Sandton", "Soweto", "Rosebank", "Randburg" });
+                    break;
+                case "Cape Town":
+                    cmbArea.Items.AddRange(new string[] { "Sea Point", "Khayelitsha", "Bellville", "Mitchells Plain" });
+                    break;
+                default:
+                    cmbArea.Items.Add("Other");
+                    break;
+            }
+
+            cmbArea.SelectedIndex = 0;
         }
 
         private void btnAddAttachment_Click(object sender, EventArgs e)
@@ -179,9 +252,9 @@ namespace MunicipalServicesApp
 
         private void btnSubmit_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtLocation.Text) || string.IsNullOrWhiteSpace(rtbDescription.Text))
+            if (cmbProvince.SelectedItem == null || cmbCity.SelectedItem == null || cmbArea.SelectedItem == null || string.IsNullOrWhiteSpace(rtbDescription.Text))
             {
-                MessageBox.Show("⚠️ Please provide both a location and description.",
+                MessageBox.Show("⚠️ Please provide a complete location and description.",
                                 "Validation Error",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Warning);
@@ -190,8 +263,10 @@ namespace MunicipalServicesApp
 
             var issue = new Issue
             {
-                Location = txtLocation.Text.Trim(),
-                Category = cmbCategory.SelectedItem.ToString(),
+                Province = cmbProvince.SelectedItem?.ToString() ?? string.Empty,
+                City = cmbCity.SelectedItem?.ToString() ?? string.Empty,
+                Area = cmbArea.SelectedItem?.ToString() ?? string.Empty,
+                Category = cmbCategory.SelectedItem?.ToString() ?? string.Empty,
                 Description = rtbDescription.Text.Trim(),
                 UserId = CurrentUserId
             };
@@ -210,7 +285,9 @@ namespace MunicipalServicesApp
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information);
 
-            txtLocation.Clear();
+            cmbProvince.SelectedIndex = 0;
+            cmbCity.Items.Clear();
+            cmbArea.Items.Clear();
             rtbDescription.Clear();
             lstAttachments.Items.Clear();
             cmbCategory.SelectedIndex = 0;
@@ -255,7 +332,7 @@ namespace MunicipalServicesApp
         {
             string helpMessage =
                 "📌 How to report an issue:\n\n" +
-                "1. Enter the exact location of the issue.\n" +
+                "1. Select your Province, City, and Area.\n" +
                 "2. Select the appropriate category for the issue.\n" +
                 "3. Describe the issue clearly.\n" +
                 "4. Add any relevant attachments.\n" +
@@ -282,9 +359,7 @@ namespace MunicipalServicesApp
             }
         }
 
-        private void picLogo_Click(object sender, EventArgs e)
-        {
-
-        }
+        private void picLogo_Click(object sender, EventArgs e) { }
+        private void lblTitle_Click(object sender, EventArgs e) { }
     }
 }

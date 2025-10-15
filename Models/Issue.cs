@@ -6,14 +6,23 @@ namespace MunicipalServicesApp.Models
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public DateTime DateReported { get; set; } = DateTime.Now;
-        public string Location { get; set; }
+
+        // Location broken into fields
+        public string Province { get; set; }
+        public string City { get; set; }
+        public string Area { get; set; }
+
+        // Category and description
         public string Category { get; set; }
         public string Description { get; set; }
 
-        // Store attachments as an array (no List<T>)
+        // Attachments as array
         public string[] AttachedFiles { get; set; } = new string[0];
 
-        // Track the user who submitted the issue
-        public string UserId { get; set; } = "defaultUser"; // Default since we have no login
+        // User info
+        public string UserId { get; set; } = "defaultUser";
+
+        // Convenience property to get full location
+        public string FullLocation => $"{Province}, {City}, {Area}";
     }
 }
