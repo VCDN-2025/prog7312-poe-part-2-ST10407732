@@ -48,8 +48,8 @@ The application leverages advanced data structures including **stacks, queues, p
 
 ## ✨ Key Features
 
-## Youtube Video Link
-[<a href="https://youtu.be/p7eRyulXWA0">](https://youtu.be/p7eRyulXWA0)
+
+
 
 ### 🎯 Core Functionality
 - **Local Events Dashboard**: Browse all upcoming community events in an aesthetically pleasing card-based layout
@@ -57,6 +57,7 @@ The application leverages advanced data structures including **stacks, queues, p
 - **Smart Recommendations**: AI-powered suggestions based on your search patterns and preferences
 - **Event Details**: View comprehensive information about each event including location, date, description, and category
 - **Search Analytics**: Track your search history and see what types of events you're interested in
+- 
 
 ### 🔧 Technical Highlights
 - **Custom Data Structures**: Implemented from scratch to demonstrate algorithmic proficiency
@@ -70,8 +71,11 @@ The application leverages advanced data structures including **stacks, queues, p
 - **Event Management**: Efficient storage and retrieval of event data
 
 ---
+## Youtube Video Link
 
+https://youtu.be/p7eRyulXWA0
 ## 📸 Screenshots
+
 
 ### 🏠 Main Menu
 The central hub providing access to all municipal services.
