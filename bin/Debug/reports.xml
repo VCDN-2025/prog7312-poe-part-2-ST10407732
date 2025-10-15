@@ -351,4 +351,43 @@
     </AttachedFiles>
     <UserId>Lungisani</UserId>
   </Issue>
+  <Issue>
+    <Id>b7646153-7d21-4358-82ae-9c19c26b46ef</Id>
+    <DateReported>2025-10-15T19:49:59.2949719+02:00</DateReported>
+    <Province>KwaZulu-Natal</Province>
+    <City>Durban</City>
+    <Area>Berea</Area>
+    <Category>💧 Water Supply</Category>
+    <Description>hdhf</Description>
+    <AttachedFiles>
+      <string>C:\Users\davyc\source\repos\MunicipalServicesApp\bin\Debug\Reports\Media\a945f498a81b4ac7880fe562df75045c_water supply.jpeg</string>
+    </AttachedFiles>
+    <UserId>Lungisani</UserId>
+  </Issue>
+  <Issue>
+    <Id>520555ee-e436-412a-a2d0-8f43d0eab39d</Id>
+    <DateReported>2025-10-15T19:51:15.5159705+02:00</DateReported>
+    <Province>Western Cape</Province>
+    <City>Cape Town</City>
+    <Area>Khayelitsha</Area>
+    <Category>🚧 Road Damage</Category>
+    <Description>road damage</Description>
+    <AttachedFiles>
+      <string>C:\Users\davyc\source\repos\MunicipalServicesApp\bin\Debug\Reports\Media\55cbdd55ed40463fa1b7e958d4d99e1e_water supply.jpeg</string>
+    </AttachedFiles>
+    <UserId>Lungisani</UserId>
+  </Issue>
+  <Issue>
+    <Id>d5c3bfbe-89a0-47ac-8161-bd60e4c106ed</Id>
+    <DateReported>2025-10-15T19:58:20.0215713+02:00</DateReported>
+    <Province>Gauteng</Province>
+    <City>Johannesburg</City>
+    <Area>Sandton</Area>
+    <Category>🚧 Road Damage</Category>
+    <Description>road</Description>
+    <AttachedFiles>
+      <string>C:\Users\davyc\source\repos\MunicipalServicesApp\bin\Debug\Reports\Media\074d1a7f6b1b478c8b86097e842c6d24_water supply.jpeg</string>
+    </AttachedFiles>
+    <UserId>Lungisani</UserId>
+  </Issue>
 </ArrayOfIssue>

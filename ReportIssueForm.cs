@@ -29,6 +29,7 @@ namespace MunicipalServicesApp
         private void ReportIssueForm_Load(object sender, EventArgs e)
         {
             this.BackColor = LightGray;
+            this.Size = new Size(1000, 700);
 
             // Title with emoji
             lblTitle.Text = "📢 Report an Issue";
@@ -36,27 +37,41 @@ namespace MunicipalServicesApp
             lblTitle.Height = 60;
             lblTitle.TextAlign = ContentAlignment.MiddleCenter;
 
-            // Layout rows
+            // Configure main layout
+            mainLayout.Padding = new Padding(30);
             mainLayout.RowStyles.Clear();
-            for (int i = 0; i < 8; i++) // extra rows for city/area
-                mainLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
-            // Location - Populate Provinces
-            lblLocation.Text = "📍 Location:";
-            lblLocation.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblLocation.ForeColor = DarkGray;
+            // Row styles for better spacing
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));  // Location header
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));  // Province
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));  // City
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));  // Area
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));  // Category
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 130F)); // Description
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 90F));  // Attachments
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));  // Add button
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));  // Submit buttons
+
+            // Location Header
+            lblLocation.Text = "📍 Location";
+            lblLocation.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblLocation.ForeColor = PrimaryTeal;
+            lblLocation.TextAlign = ContentAlignment.MiddleLeft;
+
+            // Province
+            Label lblProvLabel = new Label
+            {
+                Text = "Province:",
+                Font = new Font("Segoe UI", 10F),
+                ForeColor = DarkGray,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Dock = DockStyle.Fill
+            };
 
             cmbProvince.Font = new Font("Segoe UI", 11F);
-            cmbCity.Font = new Font("Segoe UI", 11F);
-            cmbArea.Font = new Font("Segoe UI", 11F);
-
             cmbProvince.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbCity.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbArea.DropDownStyle = ComboBoxStyle.DropDownList;
-
+            cmbProvince.Dock = DockStyle.Fill;
             cmbProvince.SelectedIndexChanged += cmbProvince_SelectedIndexChanged;
-            cmbCity.SelectedIndexChanged += cmbCity_SelectedIndexChanged;
-
             cmbProvince.Items.AddRange(new string[]
             {
                 "KwaZulu-Natal",
@@ -71,12 +86,44 @@ namespace MunicipalServicesApp
             });
             cmbProvince.SelectedIndex = 0;
 
+            // City
+            Label lblCityLabel = new Label
+            {
+                Text = "City:",
+                Font = new Font("Segoe UI", 10F),
+                ForeColor = DarkGray,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Dock = DockStyle.Fill
+            };
+
+            cmbCity.Font = new Font("Segoe UI", 11F);
+            cmbCity.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbCity.Dock = DockStyle.Fill;
+            cmbCity.SelectedIndexChanged += cmbCity_SelectedIndexChanged;
+
+            // Area
+            Label lblAreaLabel = new Label
+            {
+                Text = "Area:",
+                Font = new Font("Segoe UI", 10F),
+                ForeColor = DarkGray,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Dock = DockStyle.Fill
+            };
+
+            cmbArea.Font = new Font("Segoe UI", 11F);
+            cmbArea.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbArea.Dock = DockStyle.Fill;
+
             // Category
-            lblCategory.Text = "📂 Category:";
+            lblCategory.Text = "📂 Category";
             lblCategory.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             lblCategory.ForeColor = DarkGray;
+            lblCategory.TextAlign = ContentAlignment.MiddleLeft;
+
             cmbCategory.Font = new Font("Segoe UI", 11F);
             cmbCategory.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbCategory.Dock = DockStyle.Fill;
             cmbCategory.Items.AddRange(new string[]
             {
                 "🚧 Road Damage",
@@ -88,37 +135,89 @@ namespace MunicipalServicesApp
             cmbCategory.SelectedIndex = 0;
 
             // Description
-            lblDescription.Text = "📝 Description:";
+            lblDescription.Text = "📝 Description";
             lblDescription.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             lblDescription.ForeColor = DarkGray;
-            rtbDescription.Height = 120;
+            lblDescription.TextAlign = ContentAlignment.TopLeft;
+
+            rtbDescription.Font = new Font("Segoe UI", 10F);
+            rtbDescription.Dock = DockStyle.Fill;
 
             // Attachments
-            lblAttachments.Text = "📎 Attachments:";
+            lblAttachments.Text = "📎 Attachments";
             lblAttachments.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             lblAttachments.ForeColor = DarkGray;
-            lstAttachments.Height = 80;
+            lblAttachments.TextAlign = ContentAlignment.TopLeft;
+
+            lstAttachments.Font = new Font("Segoe UI", 9F);
+            lstAttachments.Dock = DockStyle.Fill;
+
             btnAddAttachment.Text = "➕ Add Attachment";
             btnAddAttachment.BackColor = AccentBlue;
             btnAddAttachment.ForeColor = Color.White;
             btnAddAttachment.FlatStyle = FlatStyle.Flat;
+            btnAddAttachment.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnAddAttachment.Height = 40;
+            btnAddAttachment.Dock = DockStyle.Right;
+            btnAddAttachment.Width = 180;
             btnAddAttachment.Click += btnAddAttachment_Click;
 
-            // Submit
+            // Buttons Panel
+            Panel buttonPanel = new Panel
+            {
+                Dock = DockStyle.Fill,
+                Height = 50
+            };
+
             btnSubmit.Text = "✅ Submit Issue";
             btnSubmit.BackColor = SuccessGreen;
             btnSubmit.ForeColor = Color.White;
-            btnSubmit.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnSubmit.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             btnSubmit.FlatStyle = FlatStyle.Flat;
+            btnSubmit.Size = new Size(180, 45);
+            btnSubmit.Location = new Point(0, 5);
             btnSubmit.Click += btnSubmit_Click;
 
-            // Back
             btnBackToMenu.Text = "⬅ Back to Menu";
             btnBackToMenu.BackColor = PrimaryTeal;
             btnBackToMenu.ForeColor = Color.White;
-            btnBackToMenu.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnBackToMenu.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             btnBackToMenu.FlatStyle = FlatStyle.Flat;
+            btnBackToMenu.Size = new Size(180, 45);
+            btnBackToMenu.Location = new Point(200, 5);
             btnBackToMenu.Click += btnBackToMenu_Click;
+
+            buttonPanel.Controls.Add(btnSubmit);
+            buttonPanel.Controls.Add(btnBackToMenu);
+
+            // Add controls to layout
+            mainLayout.Controls.Clear();
+            mainLayout.Controls.Add(lblLocation, 0, 0);
+            mainLayout.SetColumnSpan(lblLocation, 2);
+
+            mainLayout.Controls.Add(lblProvLabel, 0, 1);
+            mainLayout.Controls.Add(cmbProvince, 1, 1);
+
+            mainLayout.Controls.Add(lblCityLabel, 0, 2);
+            mainLayout.Controls.Add(cmbCity, 1, 2);
+
+            mainLayout.Controls.Add(lblAreaLabel, 0, 3);
+            mainLayout.Controls.Add(cmbArea, 1, 3);
+
+            mainLayout.Controls.Add(lblCategory, 0, 4);
+            mainLayout.Controls.Add(cmbCategory, 1, 4);
+
+            mainLayout.Controls.Add(lblDescription, 0, 5);
+            mainLayout.Controls.Add(rtbDescription, 1, 5);
+
+            mainLayout.Controls.Add(lblAttachments, 0, 6);
+            mainLayout.Controls.Add(lstAttachments, 1, 6);
+
+            mainLayout.Controls.Add(new Label(), 0, 7);
+            mainLayout.Controls.Add(btnAddAttachment, 1, 7);
+
+            mainLayout.Controls.Add(buttonPanel, 0, 8);
+            mainLayout.SetColumnSpan(buttonPanel, 2);
 
             // Engagement
             lblEngagement.Text = "Community engagement tracker...";
@@ -127,7 +226,7 @@ namespace MunicipalServicesApp
             lblEngagement.TextAlign = ContentAlignment.MiddleCenter;
 
             // ProgressBar
-            progressBar.Height = 20;
+            progressBar.Height = 25;
 
             // Side panel
             sidePanel.Dock = DockStyle.Right;
@@ -138,39 +237,30 @@ namespace MunicipalServicesApp
             {
                 Text = "📊 My Reports",
                 Dock = DockStyle.Top,
-                Height = 50,
-                FlatStyle = FlatStyle.Flat
+                Height = 60,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+                ForeColor = Color.White,
+                BackColor = Color.Transparent
             };
+            btnMyReports.FlatAppearance.BorderSize = 0;
             btnMyReports.Click += btnMyReports_Click;
 
             Button btnHelp = new Button
             {
                 Text = "❓ Help",
                 Dock = DockStyle.Top,
-                Height = 50,
+                Height = 60,
                 FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
                 ForeColor = Color.White,
                 BackColor = PrimaryTeal
             };
+            btnHelp.FlatAppearance.BorderSize = 0;
             btnHelp.Click += btnHelp_Click;
 
             sidePanel.Controls.Add(btnHelp);
             sidePanel.Controls.Add(btnMyReports);
-
-            // Add controls to layout
-            mainLayout.Controls.Add(lblLocation, 0, 0);
-            mainLayout.Controls.Add(cmbProvince, 1, 0);
-            mainLayout.Controls.Add(cmbCity, 1, 1);
-            mainLayout.Controls.Add(cmbArea, 1, 2);
-            mainLayout.Controls.Add(lblCategory, 0, 3);
-            mainLayout.Controls.Add(cmbCategory, 1, 3);
-            mainLayout.Controls.Add(lblDescription, 0, 4);
-            mainLayout.Controls.Add(rtbDescription, 1, 4);
-            mainLayout.Controls.Add(lblAttachments, 0, 5);
-            mainLayout.Controls.Add(lstAttachments, 1, 5);
-            mainLayout.Controls.Add(btnAddAttachment, 1, 6);
-            mainLayout.Controls.Add(btnSubmit, 0, 7);
-            mainLayout.Controls.Add(btnBackToMenu, 1, 7);
 
             // Load issues
             issueList = IssueStorage.Load();
@@ -203,7 +293,8 @@ namespace MunicipalServicesApp
                     break;
             }
 
-            cmbCity.SelectedIndex = 0;
+            if (cmbCity.Items.Count > 0)
+                cmbCity.SelectedIndex = 0;
         }
 
         private void cmbCity_SelectedIndexChanged(object sender, EventArgs e)
@@ -226,7 +317,8 @@ namespace MunicipalServicesApp
                     break;
             }
 
-            cmbArea.SelectedIndex = 0;
+            if (cmbArea.Items.Count > 0)
+                cmbArea.SelectedIndex = 0;
         }
 
         private void btnAddAttachment_Click(object sender, EventArgs e)
@@ -252,7 +344,8 @@ namespace MunicipalServicesApp
 
         private void btnSubmit_Click(object sender, EventArgs e)
         {
-            if (cmbProvince.SelectedItem == null || cmbCity.SelectedItem == null || cmbArea.SelectedItem == null || string.IsNullOrWhiteSpace(rtbDescription.Text))
+            if (cmbProvince.SelectedItem == null || cmbCity.SelectedItem == null ||
+                cmbArea.SelectedItem == null || string.IsNullOrWhiteSpace(rtbDescription.Text))
             {
                 MessageBox.Show("⚠️ Please provide a complete location and description.",
                                 "Validation Error",
@@ -286,8 +379,6 @@ namespace MunicipalServicesApp
                             MessageBoxIcon.Information);
 
             cmbProvince.SelectedIndex = 0;
-            cmbCity.Items.Clear();
-            cmbArea.Items.Clear();
             rtbDescription.Clear();
             lstAttachments.Items.Clear();
             cmbCategory.SelectedIndex = 0;
