@@ -29,6 +29,7 @@ namespace MunicipalServicesApp
         private Button btnSearch;
         private Button btnClearFilters;
         private Button btnShowRecommendations;
+        private Button btnBack;
         private FlowLayoutPanel eventsContainer;
         private ComboBox cmbSort;
         private Label lblResultCount;
@@ -87,7 +88,6 @@ namespace MunicipalServicesApp
                 new Event("E018", "Food Drive", "Community", new DateTime(2025, 10, 21), "Various Locations", "Donate non-perishable foods for families in need", "", 1),
                 new Event("E019", "Fire Safety Demonstration", "Safety", new DateTime(2025, 11, 7), "Fire Station", "Learn fire safety and prevention", "", 2),
                 new Event("E020", "Music in the Park", "Culture", new DateTime(2025, 11, 14), "Central Park", "Live music performances every Sunday", "", 3),
-                // NEW EVENTS
                 new Event("E021", "Vaccination Drive", "Health", new DateTime(2025, 10, 27), "Health Clinic", "Free flu shots for all ages", "", 2),
                 new Event("E022", "Youth Coding Workshop", "Education", new DateTime(2025, 11, 9), "Tech Hub", "Learn programming basics for ages 12-18", "", 2),
                 new Event("E023", "Neighborhood Watch Meeting", "Safety", new DateTime(2025, 10, 23), "Community Hall", "Monthly safety update and planning session", "", 1),
@@ -144,12 +144,12 @@ namespace MunicipalServicesApp
                 ColumnCount = 1,
                 Padding = new Padding(0)
             };
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 100F));  // Header
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 140F)); // Search
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));  // Content
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));  // Footer
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 100F));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 140F));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
 
-            // Header
+            // Header with Back Button
             Panel header = CreateHeader();
             mainLayout.Controls.Add(header, 0, 0);
 
@@ -199,6 +199,25 @@ namespace MunicipalServicesApp
                 }
             };
 
+            // Back Button
+            btnBack = new Button
+            {
+                Text = "⬅ Back to Menu",
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                BackColor = Color.FromArgb(200, 255, 255, 255),
+                ForeColor = PrimaryTeal,
+                FlatStyle = FlatStyle.Flat,
+                Size = new Size(150, 35),
+                Location = new Point(20, 15),
+                Cursor = Cursors.Hand
+            };
+            btnBack.FlatAppearance.BorderSize = 0;
+            btnBack.Click += (s, e) => this.Close();
+
+            Color btnHoverColor = Color.White;
+            btnBack.MouseEnter += (s, e) => btnBack.BackColor = btnHoverColor;
+            btnBack.MouseLeave += (s, e) => btnBack.BackColor = Color.FromArgb(200, 255, 255, 255);
+
             Label lblTitle = new Label
             {
                 Text = "📢 LOCAL EVENTS & ANNOUNCEMENTS",
@@ -223,6 +242,7 @@ namespace MunicipalServicesApp
                 TextAlign = ContentAlignment.TopCenter
             };
 
+            header.Controls.Add(btnBack);
             header.Controls.Add(lblTitle);
             header.Controls.Add(lblSubtitle);
 
@@ -238,7 +258,6 @@ namespace MunicipalServicesApp
                 Padding = new Padding(25, 15, 25, 15)
             };
 
-            // Add shadow effect
             panel.Paint += (s, pe) =>
             {
                 Rectangle shadowRect = new Rectangle(0, panel.Height - 3, panel.Width, 3);
@@ -249,7 +268,6 @@ namespace MunicipalServicesApp
                 }
             };
 
-            // Row 1: Search and filters
             Label lblSearchTitle = new Label
             {
                 Text = "🔍 Search & Filter Events",
@@ -280,7 +298,6 @@ namespace MunicipalServicesApp
             cmbSort.Items.AddRange(new string[] { "Sort by Date", "Sort by Category", "Sort by Title" });
             cmbSort.SelectedIndex = 0;
 
-            // Row 2: Action buttons
             btnSearch = CreateActionButton("🔍 Search", AccentBlue, new Point(25, 85), 140);
             btnSearch.Click += BtnSearch_Click;
 
@@ -466,13 +483,11 @@ namespace MunicipalServicesApp
             {
                 pe.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-                // Shadow
                 var shadowRect = new Rectangle(4, 4, card.Width - 4, card.Height - 4);
                 var shadowPath = GetRoundedRectanglePath(shadowRect, 12);
                 using (var shadowBrush = new SolidBrush(CardShadow))
                     pe.Graphics.FillPath(shadowBrush, shadowPath);
 
-                // Card background
                 var rect = new Rectangle(0, 0, card.Width - 6, card.Height - 6);
                 var path = GetRoundedRectanglePath(rect, 12);
                 using (var brush = new SolidBrush(Color.White))
@@ -480,7 +495,6 @@ namespace MunicipalServicesApp
                 using (var borderPen = new Pen(BorderGray, 1))
                     pe.Graphics.DrawPath(borderPen, path);
 
-                // Category accent strip - THICKER
                 Color categoryColor = GetCategoryColor(evt.Category);
                 using (var accentBrush = new SolidBrush(categoryColor))
                 {
@@ -494,7 +508,6 @@ namespace MunicipalServicesApp
                 }
             };
 
-            // Date badge - MORE PROMINENT
             Panel dateBadge = new Panel
             {
                 Size = new Size(75, 75),
@@ -533,7 +546,6 @@ namespace MunicipalServicesApp
             dateBadge.Controls.Add(lblDay);
             dateBadge.Controls.Add(lblMonth);
 
-            // Title - BIGGER AND BOLDER
             Label lblTitle = new Label
             {
                 Text = evt.Title,
@@ -545,7 +557,6 @@ namespace MunicipalServicesApp
                 AutoEllipsis = true
             };
 
-            // Category badge - MORE VISIBLE
             Panel categoryBadge = new Panel
             {
                 Location = new Point(105, 88),
@@ -588,7 +599,6 @@ namespace MunicipalServicesApp
                 AutoEllipsis = true
             };
 
-            // Action panel - MORE PROMINENT
             Panel actionPanel = new Panel
             {
                 Location = new Point(0, 203),
@@ -642,6 +652,7 @@ namespace MunicipalServicesApp
                 case "Environment": return Color.FromArgb(76, 175, 80);
                 case "Employment": return Color.FromArgb(63, 81, 181);
                 case "Safety": return Color.FromArgb(244, 67, 54);
+                case "Education": return Color.FromArgb(3, 169, 244);
                 default: return DarkGray;
             }
         }
@@ -690,18 +701,12 @@ namespace MunicipalServicesApp
             DisplayEvents(eventsById.GetAllValues());
         }
 
-
-
-
-
-
         private void BtnShowRecommendations_Click(object sender, EventArgs e)
         {
             var allEvents = eventsById.GetAllValues();
             var recommendations = recommendationEngine.GetRecommendedEvents(allEvents, 6);
             bool hasSearchHistory = recommendationEngine.GetTotalSearchCount() > 0;
 
-            // === FORM SETUP ===
             Form recForm = new Form
             {
                 Text = "⭐ Event Recommendations",
@@ -712,25 +717,51 @@ namespace MunicipalServicesApp
                 MaximizeBox = true
             };
 
-            // === SCROLLABLE MAIN CONTAINER ===
-            Panel mainContainer = new Panel
+            // Main scrollable container
+            Panel scrollContainer = new Panel
             {
                 Dock = DockStyle.Fill,
                 AutoScroll = true,
                 BackColor = LightGray
             };
 
-            int yPosition = 20;
+            // Inner content panel with fixed width
+            Panel contentPanel = new Panel
+            {
+                Width = 1360,
+                AutoSize = true,
+                Location = new Point(10, 10),
+                BackColor = LightGray
+            };
 
-            // === SECTION 1: PERSONALIZED RECOMMENDATIONS (IF USER HAS SEARCH HISTORY) ===
+            int yPos = 10;
+
+            // Back button at top
+            Button btnBackRec = new Button
+            {
+                Text = "⬅ Back",
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                BackColor = DarkGray,
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Size = new Size(120, 40),
+                Location = new Point(20, yPos),
+                Cursor = Cursors.Hand
+            };
+            btnBackRec.FlatAppearance.BorderSize = 0;
+            btnBackRec.Click += (s, ev) => recForm.Close();
+            contentPanel.Controls.Add(btnBackRec);
+            yPos += 60;
+
+            // Personalized section
             if (hasSearchHistory)
             {
                 var personalizedEvents = recommendations.Take(6).ToList();
 
                 Panel personalizedHeader = new Panel
                 {
-                    Location = new Point(0, yPosition),
-                    Size = new Size(1180, 100),
+                    Location = new Point(0, yPos),
+                    Size = new Size(1340, 100),
                     BackColor = SuccessGreen
                 };
                 personalizedHeader.Paint += (s, pe) =>
@@ -749,8 +780,8 @@ namespace MunicipalServicesApp
                     ForeColor = Color.White,
                     BackColor = Color.Transparent,
                     AutoSize = false,
-                    Size = new Size(1100, 50),
-                    Location = new Point(40, 15),
+                    Size = new Size(1280, 50),
+                    Location = new Point(30, 15),
                     TextAlign = ContentAlignment.MiddleLeft
                 };
 
@@ -761,19 +792,20 @@ namespace MunicipalServicesApp
                     ForeColor = Color.FromArgb(230, 255, 230),
                     BackColor = Color.Transparent,
                     AutoSize = false,
-                    Size = new Size(1100, 30),
-                    Location = new Point(40, 60),
+                    Size = new Size(1280, 30),
+                    Location = new Point(30, 60),
                     TextAlign = ContentAlignment.TopLeft
                 };
 
                 personalizedHeader.Controls.Add(lblPersonalizedTitle);
                 personalizedHeader.Controls.Add(lblPersonalizedSubtitle);
-                mainContainer.Controls.Add(personalizedHeader);
-                yPosition += 100;
+                contentPanel.Controls.Add(personalizedHeader);
+                yPos += 110;
+
                 FlowLayoutPanel personalizedFlow = new FlowLayoutPanel
                 {
-                    Location = new Point(20, yPosition),
-                    Size = new Size(1150, 350),  // Enough height for one row of cards
+                    Location = new Point(10, yPos),
+                    Size = new Size(1320, 280),
                     FlowDirection = FlowDirection.LeftToRight,
                     WrapContents = true,
                     Padding = new Padding(10),
@@ -781,48 +813,36 @@ namespace MunicipalServicesApp
                     AutoScroll = false
                 };
 
-                // Calculate width to fit exactly 3 cards per row
-                int cardGap = 10; // Gap between cards
-                int totalPadding = personalizedFlow.Padding.Left + personalizedFlow.Padding.Right;
-                int totalGaps = cardGap * 2; // 2 gaps between 3 cards
-                int availableWidth = personalizedFlow.Width - totalPadding - totalGaps;
-                int cardWidth = availableWidth / 3;
-
                 foreach (var evt in personalizedEvents)
                 {
-                    var card = CreateEventCard(evt);
-                    card.Width = cardWidth;  // Force width for 3 cards per row
-                    card.Margin = new Padding(0, 0, cardGap, 0); // Add gap to the right of each card
-                    personalizedFlow.Controls.Add(card);
+                    personalizedFlow.Controls.Add(CreateEventCard(evt));
                 }
 
-                mainContainer.Controls.Add(personalizedFlow);
-                yPosition += 370; // Adjust vertical spacing for next section
+                contentPanel.Controls.Add(personalizedFlow);
+                yPos += 290;
 
-
-                // Divider
                 Panel divider = new Panel
                 {
-                    Location = new Point(40, yPosition),
-                    Size = new Size(1100, 3),
+                    Location = new Point(40, yPos),
+                    Size = new Size(1260, 3),
                     BackColor = BorderGray
                 };
-                mainContainer.Controls.Add(divider);
-                yPosition += 25;
+                contentPanel.Controls.Add(divider);
+                yPos += 25;
             }
 
-            // === SECTION 2: TRENDING EVENTS (ALWAYS SHOW 3) ===
+            // Trending section
             var trendingEvents = allEvents
                 .Where(ev => ev.Date >= DateTime.Now && ev.Priority >= 2)
                 .OrderByDescending(ev => ev.Priority)
                 .ThenBy(ev => ev.Date)
-                .Take(3) // ✅ Always only 3 events
+                .Take(3)
                 .ToList();
 
             Panel trendingHeader = new Panel
             {
-                Location = new Point(0, yPosition),
-                Size = new Size(1180, 90),
+                Location = new Point(0, yPos),
+                Size = new Size(1340, 90),
                 BackColor = AccentBlue
             };
             trendingHeader.Paint += (s, pe) =>
@@ -841,8 +861,8 @@ namespace MunicipalServicesApp
                 ForeColor = Color.White,
                 BackColor = Color.Transparent,
                 AutoSize = false,
-                Size = new Size(1100, 45),
-                Location = new Point(40, 15),
+                Size = new Size(1280, 45),
+                Location = new Point(30, 15),
                 TextAlign = ContentAlignment.MiddleLeft
             };
 
@@ -853,23 +873,22 @@ namespace MunicipalServicesApp
                 ForeColor = Color.FromArgb(220, 240, 255),
                 BackColor = Color.Transparent,
                 AutoSize = false,
-                Size = new Size(1100, 25),
-                Location = new Point(40, 55),
+                Size = new Size(1280, 25),
+                Location = new Point(30, 55),
                 TextAlign = ContentAlignment.TopLeft
             };
 
             trendingHeader.Controls.Add(lblTrendingTitle);
             trendingHeader.Controls.Add(lblTrendingSubtitle);
-            mainContainer.Controls.Add(trendingHeader);
-            yPosition += 90;
+            contentPanel.Controls.Add(trendingHeader);
+            yPos += 100;
 
             FlowLayoutPanel trendingFlow = new FlowLayoutPanel
             {
-                Location = new Point(20, yPosition),
-                Size = new Size(1150, 280),
+                Location = new Point(10, yPos),
+                Size = new Size(1320, 280),
                 FlowDirection = FlowDirection.LeftToRight,
                 WrapContents = false,
-                AutoScroll = true,
                 Padding = new Padding(10),
                 BackColor = Color.FromArgb(250, 250, 252)
             };
@@ -877,20 +896,19 @@ namespace MunicipalServicesApp
             foreach (var evt in trendingEvents)
                 trendingFlow.Controls.Add(CreateEventCard(evt));
 
-            mainContainer.Controls.Add(trendingFlow);
-            yPosition += 300;
+            contentPanel.Controls.Add(trendingFlow);
+            yPos += 290;
 
-            // === BEAUTIFUL STATISTICS PANEL ===
+            // Statistics panel
             Panel statsPanel = new Panel
             {
-                Dock = DockStyle.Bottom,
-                Height = 140,
+                Location = new Point(10, yPos),
+                Size = new Size(1320, 140),
                 BackColor = Color.FromArgb(242, 245, 249),
                 Padding = new Padding(25, 10, 25, 10),
                 BorderStyle = BorderStyle.None
             };
 
-            // Top line
             Panel line = new Panel
             {
                 Dock = DockStyle.Top,
@@ -929,22 +947,14 @@ namespace MunicipalServicesApp
                 }
             };
 
-            // === FINAL CONTAINER ===
-            Panel outerContainer = new Panel
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.White
-            };
+            contentPanel.Controls.Add(statsPanel);
+            yPos += 160;
 
-            mainContainer.Dock = DockStyle.Fill;
-            outerContainer.Controls.Add(mainContainer);
-            outerContainer.Controls.Add(statsPanel);
-
-            recForm.Controls.Add(outerContainer);
+            contentPanel.Height = yPos;
+            scrollContainer.Controls.Add(contentPanel);
+            recForm.Controls.Add(scrollContainer);
             recForm.ShowDialog();
         }
-
-
 
         private void ShowEventDetails(Event evt)
         {
@@ -1065,7 +1075,6 @@ namespace MunicipalServicesApp
             AddDetailRow("📅", "DATE & TIME", evt.Date.ToString("dddd, MMMM dd, yyyy"), AccentBlue);
             AddDetailRow("📍", "LOCATION", evt.Location, WarningOrange);
 
-            // Description section
             Panel descPanel = new Panel
             {
                 Location = new Point(10, yPos),
@@ -1107,7 +1116,6 @@ namespace MunicipalServicesApp
             descPanel.Controls.Add(lblDesc);
             contentPanel.Controls.Add(descPanel);
 
-            // Close button
             Button btnClose = new Button
             {
                 Text = "Close",

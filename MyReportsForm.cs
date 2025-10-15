@@ -231,21 +231,21 @@ namespace MunicipalServicesApp
             {
                 badge = "🥉 Bronze";
                 int remaining = 5 - userReportCount;
-                message = $"You have submitted {userReportCount} report(s). {remaining} more to reach Bronze 🥉!";
+                message = $"You have submitted {userReportCount} report(s). {remaining} more to reach Silver 🥉!";
                 bgColor = Color.SandyBrown;
             }
             else if (userReportCount < 10)
             {
                 badge = "🥈 Silver";
                 int remaining = 10 - userReportCount;
-                message = $"Great work! {userReportCount} reports submitted. {remaining} more to reach Silver 🥈!";
+                message = $"Great work! {userReportCount} reports submitted. {remaining} more to reach Gold 🥈!";
                 bgColor = Color.Silver;
             }
             else if (userReportCount < 15)
             {
                 badge = "🥇 Gold";
                 int remaining = 15 - userReportCount;
-                message = $"Awesome! {userReportCount} reports submitted. {remaining} more to reach Gold 🥇!";
+                message = $"Awesome! {userReportCount} reports submitted. {remaining} more to reach Platinum 🥇!";
                 bgColor = Color.Gold;
             }
             else
